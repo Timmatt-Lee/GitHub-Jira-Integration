@@ -78,7 +78,7 @@ describe('jira issue', () => {
         {
           type: 'blockCard',
           attrs: {
-            url: 'https://github.com/Timmatt-Lee/Github-Jira-Integration/pulls/1',
+            url: 'https://github.com/Timmatt-Lee/Github-Jira-Integration/pull/1',
           },
         },
       ],
