@@ -12,6 +12,7 @@ class Jira {
     version,
     component,
     type,
+    board,
   }) {
     this.host = host;
     this.token = token;
@@ -20,6 +21,7 @@ class Jira {
     this.version = version;
     this.component = component;
     this.type = type;
+    this.board = board;
   }
 
   async check() {
@@ -83,6 +85,20 @@ class Jira {
   async postComment(issue, body) {
     return this.request(`/rest/api/3/issue/${issue}/comment`, 'post', {
       body,
+    });
+  }
+
+  async getSprints(state) {
+    const url = `/rest/agile/1.0/board/${this.board}/sprint`;
+    if (state) {
+      return this.request(`${url}?state=${state}`);
+    }
+    return this.request(url);
+  }
+
+  async postMoveIssuesToSprint(issues, id) {
+    return this.request(`/rest/agile/1.0/sprint/${id}/issue`, 'post', {
+      issues,
     });
   }
 

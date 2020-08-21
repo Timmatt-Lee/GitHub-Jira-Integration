@@ -16,6 +16,7 @@ const project = process.env.PROJECT;
 const version = process.env.VERSION;
 const component = process.env.COMPONENT;
 const type = process.env.TYPE;
+const board = process.env.BOARD;
 
 const jira = new Jira({
   host,
@@ -25,6 +26,7 @@ const jira = new Jira({
   version,
   component,
   type,
+  board,
 });
 
 describe('jira', () => {
@@ -46,6 +48,16 @@ describe('jira', () => {
   it('create issue', async () => {
     const { status } = await jira.postIssue('title of issue');
     expect(status).equal(201);
+  });
+
+  it('sprints', async () => {
+    const { status } = await jira.getSprints();
+    expect(status).equal(200);
+  });
+
+  it('active sprint', async () => {
+    const { data: { values: [{ id }] } } = await jira.getSprints('active');
+    expect(id).to.not.equal(null);
   });
 });
 
@@ -84,5 +96,12 @@ describe('jira issue', () => {
       ],
     });
     expect(status).equal(201);
+  });
+
+  it.only('move to active sprint', async () => {
+    const { data: { values: [{ id }] } } = await jira.getSprints('active');
+
+    const { status } = await jira.postMoveIssuesToSprint([this.issue.key], id);
+    expect(status).equal(204);
   });
 });
