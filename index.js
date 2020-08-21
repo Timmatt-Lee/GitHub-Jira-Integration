@@ -60,6 +60,8 @@ async function main() {
     const response = await client.pulls.update(newPR);
 
     if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
+
+    core.info(response);
   } catch (e) { core.setFailed(e); }
 }
 
