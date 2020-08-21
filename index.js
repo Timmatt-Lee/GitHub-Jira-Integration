@@ -52,7 +52,7 @@ async function main() {
       repo: github.context.repo.repo,
       pull_number: github.context.payload.pull_request.number,
       title: `[${issue.key}] ${github.context.payload.pull_request.title}`,
-      body: `(link to ${issue.key})[${host}/browse/${issue.key}]
+      body: `[link to ${issue.key}](${host}/browse/${issue.key})
         ${github.context.payload.pull_request.body}`,
     };
 
