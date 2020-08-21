@@ -56,8 +56,8 @@ async function main() {
         github.context.payload.pull_request.body`,
     };
 
-    const client = new github.GitHub(githubToken);
-    const response = await client.pulls.update(newPR);
+    const octokit = github.getOctokit(githubToken);
+    const response = await octokit.pulls.update(newPR);
 
     if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
   } catch (e) { core.setFailed(e); }
