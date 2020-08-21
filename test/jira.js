@@ -44,14 +44,14 @@ describe('jira', () => {
   });
 
   it('create issue', async () => {
-    const { status } = await jira.createIssue('title of issue');
+    const { status } = await jira.postIssue('title of issue');
     expect(status).to.not.equal(null);
   });
 });
 
-describe.only('jira issue', () => {
+describe('jira issue', () => {
   beforeEach(async () => {
-    const { data: issue } = await jira.createIssue('title of issue');
+    const { data: issue } = await jira.postIssue('title of issue');
     this.issue = issue;
   });
 
@@ -66,7 +66,7 @@ describe.only('jira issue', () => {
   });
 
   it('transit issue', async () => {
-    const id = await jira.transitIssue(this.issue.key, process.env.TRANSITION);
+    const id = await jira.postTransitIssue(this.issue.key, process.env.TRANSITION);
     expect(id).to.not.equal(null);
   });
 });

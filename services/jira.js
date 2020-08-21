@@ -36,7 +36,7 @@ class Jira {
     return id;
   }
 
-  async createIssue(summary) {
+  async postIssue(summary) {
     const id = await this.getVersionIdByPrefix();
     return this.request('/rest/api/3/issue', 'post', {
       fields: {
@@ -71,9 +71,17 @@ class Jira {
     return id;
   }
 
-  async transitIssue(issue, name) {
+  async postTransitIssue(issue, name) {
     const id = await this.getTransitionIdByName(issue, name);
     return this.request(`/rest/api/3/issue/${issue}/transitions`, 'post', {
+      transition: {
+        id,
+      },
+    });
+  }
+
+  async postComment(issue, content) {
+    return this.request(`/rest/api/3/issue/${issue}/comment`, 'post', {
       transition: {
         id,
       },
