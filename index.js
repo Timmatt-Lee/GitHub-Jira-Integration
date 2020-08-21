@@ -83,7 +83,9 @@ async function main() {
     const response = await octokit.pulls.update(newPR);
 
     if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
-  } catch (e) { core.setFailed(e); }
+  } catch (e) {
+    core.setFailed(e);
+  }
 }
 
 main();

@@ -368,7 +368,6 @@ exports.Octokit = Octokit;
 'user strict';
 
 const axios = __webpack_require__(957);
-const core = __webpack_require__(791);
 
 class Jira {
   constructor({
@@ -402,7 +401,7 @@ class Jira {
   async getVersionIdByPrefix() {
     const versions = await this.getVersions();
     const v = versions.find((_) => _.name.startsWith(this.version));
-    if (!v) core.error('Version prefix not found');
+    if (!v) throw new Error('Version prefix not found');
     const { id } = v;
     return id;
   }
@@ -439,7 +438,7 @@ class Jira {
   async getTransitionIdByName(issue, name) {
     const { transitions } = await this.getTransitions(issue);
     const t = transitions.find((_) => _.name === name);
-    if (!t) core.error('This issue cannot move to this transition');
+    if (!t) throw new Error('This issue cannot move to this transition');
     const { id } = t;
     return id;
   }
@@ -484,7 +483,7 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch((e) => core.setFailed(JSON.stringify(e)));
+    }).catch((e) => { throw new Error(JSON.stringify(e)); });
 
     return result;
   }
@@ -1800,7 +1799,9 @@ async function main() {
     const response = await octokit.pulls.update(newPR);
 
     if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
-  } catch (e) { core.setFailed(e); }
+  } catch (e) {
+    core.setFailed(e);
+  }
 }
 
 main();
