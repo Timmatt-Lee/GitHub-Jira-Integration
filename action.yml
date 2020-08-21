@@ -9,10 +9,25 @@ inputs:
     required: true
   email:
     description: Your jira email address
-    required: false
+    required: true
   token:
     description: Your jira access token
+    required: true
+  project:
+    description: Project Short Name
+    required: true
+  version:
+    description: Version Prefix that new issue attach to 
+    required: false
+  component:
+    description: Components that new issue attach to 
+    required: false
+  type:
+    description: New issue type
+    required: false
+  board:
+    description: Sprint query that new issue need to
     required: false
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'index.js'

@@ -15,7 +15,6 @@ async function main() {
   const component = core.getInput('component');
   const type = core.getInput('type');
   const board = core.getInput('board');
-  const isCreateIssue = core.getInput('isCreateIssue');
 
   const jira = new Jira({
     host,
