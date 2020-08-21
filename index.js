@@ -36,7 +36,7 @@ async function main() {
     // if title has a [AB-1234] like Jira issue tag
     const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
     if (keyWithBracket) {
-      key = keyWithBracket[0].substring(1, keyWithBracket.length - 1);
+      key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
     } else {
       const issue = await jira.postIssue(pr.title);
       key = issue.key;
