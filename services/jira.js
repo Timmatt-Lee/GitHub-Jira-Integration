@@ -113,7 +113,7 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch(core.setFailed);
+    }).catch((e) => core.setFailed(JSON.stringify(e)));
 
     return result;
   }
