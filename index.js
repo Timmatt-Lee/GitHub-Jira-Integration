@@ -59,7 +59,7 @@ async function main() {
     const client = new github.GitHub(githubToken);
     const response = await client.pulls.update(newPR);
 
-    if (response.status !== 200) { core.error(JSON.stringify(response)); }
+    if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
   } catch (e) { core.setFailed(e); }
 }
 

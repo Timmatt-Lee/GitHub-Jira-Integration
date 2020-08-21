@@ -7,6 +7,9 @@ inputs:
   host:
     description: Domain of your jira host
     required: true
+  githubToken:
+    description: Your github token
+    required: true
   email:
     description: Your jira email address
     required: true
