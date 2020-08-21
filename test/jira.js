@@ -43,8 +43,25 @@ describe('jira', () => {
     expect(id).to.not.equal(null);
   });
 
-  it.only('create issue', async () => {
+  it('create issue', async () => {
     const { status } = await jira.createIssue('title of issue');
     expect(status).to.not.equal(null);
+  });
+});
+
+describe.only('jira issue', () => {
+  beforeEach(async () => {
+    const { data: issue } = await jira.createIssue('title of issue');
+    this.issue = issue;
+  });
+
+  it('all transitions', async () => {
+    const { status } = await jira.getTransitions(this.issue.key);
+    expect(status).to.not.equal(null);
+  });
+
+  it('transition id', async () => {
+    const id = await jira.getTransitionIdByName(this.issue.key, process.env.TRANSITION);
+    expect(id).to.not.equal(null);
   });
 });

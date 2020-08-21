@@ -61,6 +61,19 @@ class Jira {
     });
   }
 
+  async getTransitions(issue) {
+    return this.request(`/rest/api/3/issue/${issue}/transitions`);
+  }
+
+  async getTransitionIdByName(issue, name) {
+    const { data: { transitions } } = await this.getTransitions(issue);
+    const { id } = transitions.find((t) => t.name === name);
+    return id;
+  }
+
+  async transitIssue(issue, transitionId) {
+  }
+
   async request(api, method = 'get', data = {}) {
     const url = `${this.host}${api}`;
 
