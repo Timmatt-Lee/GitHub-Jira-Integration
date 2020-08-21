@@ -26,12 +26,16 @@ const jira = new Jira({
 
 describe('jira', function () {
     it('init', async function () {
-        const result = await jira.check();
-        expect(result).to.not.equal(null);
+        const {
+            status
+        } = await jira.check();
+        expect(status).equal(200);
     });
 
     it('versions', async function () {
-        const result = await jira.getVersions();
-        expect(result).to.not.equal(null);
+        const {
+            status
+        } = await jira.getVersions();
+        expect(status).equal(200);
     });
 });
