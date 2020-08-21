@@ -64,4 +64,9 @@ describe.only('jira issue', () => {
     const id = await jira.getTransitionIdByName(this.issue.key, process.env.TRANSITION);
     expect(id).to.not.equal(null);
   });
+
+  it('transit issue', async () => {
+    const id = await jira.transitIssue(this.issue.key, process.env.TRANSITION);
+    expect(id).to.not.equal(null);
+  });
 });
