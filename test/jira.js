@@ -31,13 +31,13 @@ const jira = new Jira({
 
 describe('jira', () => {
   it('init', async () => {
-    const { status } = await jira.check();
-    expect(status).equal(200);
+    const data = await jira.check();
+    expect(data).to.not.equal(null);
   });
 
   it('versions', async () => {
-    const { status } = await jira.getVersions();
-    expect(status).equal(200);
+    const data = await jira.getVersions();
+    expect(data).to.not.equal(null);
   });
 
   it('versionId', async () => {
@@ -46,30 +46,30 @@ describe('jira', () => {
   });
 
   it('create issue', async () => {
-    const { status } = await jira.postIssue('title of issue');
-    expect(status).equal(201);
+    const data = await jira.postIssue('title of issue');
+    expect(data).to.not.equal(null);
   });
 
   it('sprints', async () => {
-    const { status } = await jira.getSprints();
-    expect(status).equal(200);
+    const data = await jira.getSprints();
+    expect(data).to.not.equal(null);
   });
 
   it('active sprint', async () => {
-    const { data: { values: [{ id }] } } = await jira.getSprints('active');
+    const { values: [{ id }] } = await jira.getSprints('active');
     expect(id).to.not.equal(null);
   });
 });
 
 describe('jira issue', () => {
   beforeEach(async () => {
-    const { data: issue } = await jira.postIssue('title of issue');
+    const issue = await jira.postIssue('title of issue');
     this.issue = issue;
   });
 
   it('all transitions', async () => {
-    const { status } = await jira.getTransitions(this.issue.key);
-    expect(status).equal(200);
+    const data = await jira.getTransitions(this.issue.key);
+    expect(data).to.not.equal(null);
   });
 
   it('transition id', async () => {
@@ -78,12 +78,12 @@ describe('jira issue', () => {
   });
 
   it('transit issue', async () => {
-    const { status } = await jira.postTransitIssue(this.issue.key, process.env.TRANSITION);
-    expect(status).equal(204);
+    const data = await jira.postTransitIssue(this.issue.key, process.env.TRANSITION);
+    expect(data).to.not.equal(null);
   });
 
   it('comment with a github pull request block', async () => {
-    const { status } = await jira.postComment(this.issue.key, {
+    const data = await jira.postComment(this.issue.key, {
       type: 'doc',
       version: 1,
       content: [
@@ -95,13 +95,13 @@ describe('jira issue', () => {
         },
       ],
     });
-    expect(status).equal(201);
+    expect(data).to.not.equal(null);
   });
 
-  it.only('move to active sprint', async () => {
-    const { data: { values: [{ id }] } } = await jira.getSprints('active');
+  it('move to active sprint', async () => {
+    const { values: [{ id }] } = await jira.getSprints('active');
 
-    const { status } = await jira.postMoveIssuesToSprint([this.issue.key], id);
-    expect(status).equal(204);
+    const data = await jira.postMoveIssuesToSprint([this.issue.key], id);
+    expect(data).to.not.equal(null);
   });
 });
