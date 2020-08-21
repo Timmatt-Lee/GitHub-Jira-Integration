@@ -32,5 +32,7 @@ inputs:
     description: Transition name that issue take
     required: false
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'node12'
+  main: 'dist/index.js'
+  # using: 'docker'
+  # image: 'Dockerfile'

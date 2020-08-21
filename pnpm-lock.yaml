@@ -1,6 +1,7 @@
 dependencies:
   '@actions/core': 1.2.4
   '@actions/github': 4.0.0
+  '@vercel/ncc': 0.23.0
   axios: 0.20.0
 devDependencies:
   chai: 4.2.0
@@ -135,6 +136,11 @@ packages:
     dev: false
     resolution:
       integrity: sha512-mikldZQitV94akrc4sCcSjtJfsTKt4p+e/s0AGscVA6XArQ9kFclP+ZiYUMnq987rc6QlYxXv/EivqlfSLxpKA==
+  /@vercel/ncc/0.23.0:
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha512-Fcr1qlG9t54X4X9qbo/+jr1+t5Qc6H3TgIRBXmKkF/WDs6YFulAN6ilq2Ehx38RbgIOFxaZnjlAQ50GyexnMpQ==
   /acorn-jsx/5.2.0_acorn@7.4.0:
     dependencies:
       acorn: 7.4.0
@@ -1912,6 +1918,7 @@ packages:
 specifiers:
   '@actions/core': ^1.2.4
   '@actions/github': ^4.0.0
+  '@vercel/ncc': ^0.23.0
   axios: ^0.20.0
   chai: ^4.2.0
   chai-as-promised: ^7.1.1
