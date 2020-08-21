@@ -50,8 +50,8 @@ async function main() {
       core.setFailed('Issue key parse error');
     }
 
+    core.info(key);
     await jira.postTransitIssue(key, transition);
-    core.info(1111);
 
     await jira.postComment(key, {
       type: 'doc',
@@ -79,7 +79,6 @@ async function main() {
     if (keyWithBracket) {
       delete newPR.title;
     }
-
 
     const octokit = github.getOctokit(githubToken);
     const response = await octokit.pulls.update(newPR);
