@@ -1,10 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const Jira = require('./services/jira');
-const ErrorExit = require('./services/error-exit');
-
-// eslint-disable-next-line import/no-dynamic-require
-const githubEvent = require(process.env.GITHUB_EVENT_PATH);
 
 async function main() {
   const host = core.getInput('host');
@@ -27,13 +23,26 @@ async function main() {
     board,
   });
 
-  const check = await jira.check();
+  const issue = await jira.postIssue(github.context.payload.pull_request.title);
 
-  console.log(github.context.payload);
+  await jira.postTransitIssue(issue.key, process.env.TRANSITION);
 
-  if (!check) {
-    ErrorExit.trigger(ErrorExit.INIT);
-  }
+  await jira.postComment(this.issue.key, {
+    type: 'doc',
+    version: 1,
+    content: [
+      {
+        type: 'blockCard',
+        attrs: {
+          url: github.context.payload.pull_request.html_url,
+        },
+      },
+    ],
+  });
+
+  const { values: [{ activeSprintId }] } = await jira.getSprints('active');
+
+  await jira.postMoveIssuesToSprint([issue.key], activeSprintId);
 }
 
 main();
