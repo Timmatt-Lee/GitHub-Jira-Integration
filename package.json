@@ -1,0 +1,23 @@
+{
+  "name": "github-jira-integration",
+  "version": "1.0.0",
+  "description": "automatically create or bind pull request to jira issue, resolve it when merged",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Timmatt-Lee/Github-Jira-Integration.git"
+  },
+  "keywords": [
+    "github",
+    "jira"
+  ],
+  "author": "Timmatt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Timmatt-Lee/Github-Jira-Integration/issues"
+  },
+  "homepage": "https://github.com/Timmatt-Lee/Github-Jira-Integration#readme"
+}
