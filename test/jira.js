@@ -4,7 +4,7 @@ const chai = require('chai')
     .use(require('chai-as-promised'))
     .use(require('sinon-chai'));
 const Jira = require('../services/jira');
-const ErrorExit = require('../services/errorExit');
+const ErrorExit = require('../services/error-exit');
 require('dotenv').config();
 
 const {
