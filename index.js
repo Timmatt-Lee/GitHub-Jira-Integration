@@ -46,12 +46,12 @@ async function main() {
       await jira.postMoveIssuesToSprint([key], activeSprintId);
     }
 
-    core.info(1111);
     if (!key) {
       core.setFailed('Issue key parse error');
     }
 
     await jira.postTransitIssue(key, transition);
+    core.info(1111);
 
     await jira.postComment(key, {
       type: 'doc',
