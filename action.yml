@@ -29,5 +29,5 @@ inputs:
     description: Sprint query that new issue need to
     required: false
 runs:
-  using: 'node12'
-  main: 'index.js'
+  using: 'docker'
+  image: 'Dockerfile'
