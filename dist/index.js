@@ -401,7 +401,9 @@ class Jira {
 
   async getVersionIdByPrefix() {
     const versions = await this.getVersions();
-    const { id } = versions.find((v) => v.name.startsWith(this.version));
+    const v = versions.find((_) => _.name.startsWith(this.version));
+    if (!v) core.error('Version prefix not found');
+    const { id } = v;
     return id;
   }
 
@@ -436,7 +438,9 @@ class Jira {
 
   async getTransitionIdByName(issue, name) {
     const { transitions } = await this.getTransitions(issue);
-    const { id } = transitions.find((t) => t.name === name);
+    const t = transitions.find((_) => _.name === name);
+    if (!t) core.error('This issue cannot move to this transition');
+    const { id } = t;
     return id;
   }
 
@@ -1763,7 +1767,6 @@ async function main() {
       core.setFailed('Issue key parse error');
     }
 
-    core.info(key);
     await jira.postTransitIssue(key, transition);
 
     await jira.postComment(key, {

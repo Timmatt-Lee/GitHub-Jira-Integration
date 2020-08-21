@@ -50,7 +50,6 @@ async function main() {
       core.setFailed('Issue key parse error');
     }
 
-    core.info(key);
     await jira.postTransitIssue(key, transition);
 
     await jira.postComment(key, {
