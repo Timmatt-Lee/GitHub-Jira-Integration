@@ -1,7 +1,7 @@
 'user strict';
 
 const axios = require('axios');
-const ErrorExit = require('./fail');
+const core = require('@actions/core');
 
 class Jira {
   constructor({
@@ -113,7 +113,7 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch(ErrorExit.trigger);
+    }).catch(core.setFailed);
 
     return result;
   }
