@@ -14,12 +14,14 @@ const host = process.env.HOST;
 const email = process.env.EMAIL;
 const token = process.env.TOKEN;
 const project = process.env.PROJECT;
+const version = process.env.VERSION;
 
 const jira = new Jira({
   host,
   email,
   token,
   project,
+  version,
 });
 
 describe('jira', () => {
@@ -35,5 +37,10 @@ describe('jira', () => {
       status,
     } = await jira.getVersions();
     expect(status).equal(200);
+  });
+
+  it.only('versionId', async () => {
+    const id = await jira.getVersionIdByPrefix();
+    expect(id).to.not.equal(null);
   });
 });

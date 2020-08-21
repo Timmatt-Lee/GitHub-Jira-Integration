@@ -28,8 +28,10 @@ class Jira {
     return this.request(`/rest/api/3/project/${project}/versions`);
   }
 
-  getVersionIdByPrefix(prefix = this.version) {
-    getVersions();
+  async getVersionIdByPrefix(prefix = this.version) {
+    const { data: versions } = await this.getVersions();
+    const { id } = versions.find((v) => v.name.startsWith(prefix));
+    return id;
   }
 
   async createIssue() {
