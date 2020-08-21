@@ -44,6 +44,8 @@ async function main() {
 
     const { values: [{ activeSprintId }] } = await jira.getSprints('active');
 
+    console.log(await jira.getSprints('active'));
+
     await jira.postMoveIssuesToSprint([issue.key], activeSprintId);
   } catch (e) { core.setFailed(e); }
 }
