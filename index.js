@@ -72,7 +72,7 @@ async function main() {
 
     // if title already has jira issue, no need to update it
     if (keyWithBracket) {
-      newPR.delete('title');
+      delete newPR.title;
     }
 
     const octokit = github.getOctokit(githubToken);
