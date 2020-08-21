@@ -1,7 +1,6 @@
 'user strict';
 
 const axios = require('axios');
-const core = require('@actions/core');
 
 class Jira {
   constructor({
@@ -34,7 +33,9 @@ class Jira {
 
   async getVersionIdByPrefix() {
     const versions = await this.getVersions();
-    const { id } = versions.find((v) => v.name.startsWith(this.version));
+    const v = versions.find((_) => _.name.startsWith(this.version));
+    if (!v) throw new Error('Version prefix not found');
+    const { id } = v;
     return id;
   }
 
@@ -69,7 +70,9 @@ class Jira {
 
   async getTransitionIdByName(issue, name) {
     const { transitions } = await this.getTransitions(issue);
-    const { id } = transitions.find((t) => t.name === name);
+    const t = transitions.find((_) => _.name === name);
+    if (!t) throw new Error('This issue cannot move to this transition');
+    const { id } = t;
     return id;
   }
 
@@ -113,7 +116,7 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch((e) => core.setFailed(JSON.stringify(e)));
+    }).catch((e) => { throw new Error(JSON.stringify(e)); });
 
     return result;
   }

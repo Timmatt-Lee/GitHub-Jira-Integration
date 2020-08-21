@@ -368,7 +368,6 @@ exports.Octokit = Octokit;
 'user strict';
 
 const axios = __webpack_require__(957);
-const core = __webpack_require__(791);
 
 class Jira {
   constructor({
@@ -401,7 +400,9 @@ class Jira {
 
   async getVersionIdByPrefix() {
     const versions = await this.getVersions();
-    const { id } = versions.find((v) => v.name.startsWith(this.version));
+    const v = versions.find((_) => _.name.startsWith(this.version));
+    if (!v) throw new Error('Version prefix not found');
+    const { id } = v;
     return id;
   }
 
@@ -436,7 +437,9 @@ class Jira {
 
   async getTransitionIdByName(issue, name) {
     const { transitions } = await this.getTransitions(issue);
-    const { id } = transitions.find((t) => t.name === name);
+    const t = transitions.find((_) => _.name === name);
+    if (!t) throw new Error('This issue cannot move to this transition');
+    const { id } = t;
     return id;
   }
 
@@ -480,7 +483,7 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch((e) => core.setFailed(JSON.stringify(e)));
+    }).catch((e) => { throw new Error(JSON.stringify(e)); });
 
     return result;
   }
@@ -1739,40 +1742,66 @@ async function main() {
   });
 
   try {
-    const issue = await jira.postIssue(github.context.payload.pull_request.title);
+    const pr = github.context.payload.pull_request;
+    if (!pr) {
+      core.setFailed('Only support pull request trigger');
+    }
 
-    await jira.postTransitIssue(issue.key, transition);
+    let key = '';
 
-    await jira.postComment(issue.key, {
+    // if title has a [AB-1234] like Jira issue tag
+    const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
+    if (keyWithBracket) {
+      key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
+    } else {
+      const issue = await jira.postIssue(pr.title);
+      key = issue.key;
+
+      // move card to active sprint
+      const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
+      await jira.postMoveIssuesToSprint([key], activeSprintId);
+    }
+
+    if (!key) {
+      core.setFailed('Issue key parse error');
+    }
+
+    await jira.postTransitIssue(key, transition);
+
+    await jira.postComment(key, {
       type: 'doc',
       version: 1,
       content: [
         {
           type: 'blockCard',
           attrs: {
-            url: github.context.payload.pull_request.html_url,
+            url: pr.html_url,
           },
         },
       ],
     });
 
-    const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
-
-    await jira.postMoveIssuesToSprint([issue.key], activeSprintId);
-
+    // update pull request title and desc
     const newPR = {
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
-      pull_number: github.context.payload.pull_request.number,
-      title: `[${issue.key}] ${github.context.payload.pull_request.title}`,
-      body: `[${issue.key}](${host}/browse/${issue.key})\n${github.context.payload.pull_request.body}`,
+      pull_number: pr.number,
+      title: `[${key}] ${pr.title}`,
+      body: `[${key}](${host}/browse/${key})\n${pr.body}`,
     };
+
+    // if title already has jira issue, no need to update it
+    if (keyWithBracket) {
+      delete newPR.title;
+    }
 
     const octokit = github.getOctokit(githubToken);
     const response = await octokit.pulls.update(newPR);
 
     if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
-  } catch (e) { core.setFailed(e); }
+  } catch (e) {
+    core.setFailed(e);
+  }
 }
 
 main();
