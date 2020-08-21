@@ -2,6 +2,7 @@
 
 const core = require('@actions/core');
 const Jira = require('./services/jira');
+const ErrorExit = require('./services/errorExit');
 
 const githubEvent = require(process.env.GITHUB_EVENT_PATH);
 
@@ -19,7 +20,7 @@ async function main() {
 	const check = await jira.check();
 
 	if (!check) {
-		throw new Error('Jira init error');
+		new ErrorExit(ErrorExit.INIT);
 	}
 }
 
