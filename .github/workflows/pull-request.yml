@@ -1,14 +1,14 @@
 on:
   pull_request:
-    types: [reopened]
+    types: [opened]
     branches:
       - master
 
-name: Test
+name: Test Pull Request
 
 jobs:
   test:
-    name: Test
+    name: Test Pull Request
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -27,3 +27,4 @@ jobs:
         type: ${{ secrets.JIRA_ISSUE_TYPE }}
         board: ${{ secrets.JIRA_BOARD_ID }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
+        isNotCreateIssue: true

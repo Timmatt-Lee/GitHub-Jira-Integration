@@ -13,6 +13,8 @@ async function main() {
   const board = core.getInput('board');
   const transition = core.getInput('transition');
   const githubToken = core.getInput('githubToken');
+  const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
+  const isNotCreateIssue = core.getInput('isNotCreateIssue').toLowerCase() === 'true';
 
   const jira = new Jira({
     host,
@@ -38,6 +40,9 @@ async function main() {
     if (keyWithBracket) {
       key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
     } else {
+      if (isNotCreateIssue) { process.exit(0); }
+      if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
+
       const issue = await jira.postIssue(pr.title);
       key = issue.key;
 
@@ -51,6 +56,8 @@ async function main() {
     }
 
     await jira.postTransitIssue(key, transition);
+
+    if (isOnlyTransition) { process.exit(0); }
 
     await jira.postComment(key, {
       type: 'doc',

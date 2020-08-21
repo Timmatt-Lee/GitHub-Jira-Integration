@@ -1,0 +1,25 @@
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+name: Test Merge
+
+jobs:
+  test:
+    name: Test Merge
+    if: github.event.pull_request.merged
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Integration
+      uses: ./
+      with:
+        host: ${{ secrets.JIRA_BASE_URL }}
+        email: ${{ secrets.JIRA_USER_EMAIL }}
+        token: ${{ secrets.JIRA_API_TOKEN }}
+        transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
+        isOnlyTransition: true

@@ -15,7 +15,7 @@ inputs:
     required: true
   token:
     description: Your jira access token
-    required: true
+    required: false
   project:
     description: Project Short Name
     required: true
@@ -33,7 +33,15 @@ inputs:
     required: false
   transition:
     description: Transition name that issue take
+    required: true
+  isOnlyTransition:
+    description: Only process transition to Jira issue
     required: false
+    default: false
+  isNotCreateIssue:
+    description: Do not create issue in any circumstances
+    required: false
+    default: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
