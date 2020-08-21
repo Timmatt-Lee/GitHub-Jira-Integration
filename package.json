@@ -29,7 +29,13 @@
     "chai-as-promised": "^7.1.1",
     "dotenv": "^8.2.0",
     "joi": "^17.2.1",
+    "lodash": "^4.17.20",
     "mocha": "^8.1.1",
     "sinon-chai": "^3.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.7.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0"
   }
 }

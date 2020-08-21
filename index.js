@@ -1,30 +1,29 @@
-'use strict';
-
 const core = require('@actions/core');
 const github = require('@actions/github');
 const Jira = require('./services/jira');
 const ErrorExit = require('./services/error-exit');
 
-const payload = JSON.stringify(github.context.payload, undefined, 2)
+const payload = JSON.stringify(github.context.payload, undefined, 2);
 
+// eslint-disable-next-line import/no-dynamic-require
 const githubEvent = require(process.env.GITHUB_EVENT_PATH);
 
 async function main() {
-	const host = core.getInput('host');
-	const token = core.getInput('token');
-	const email = core.getInput('email');
+  const host = core.getInput('host');
+  const token = core.getInput('token');
+  const email = core.getInput('email');
 
-	const jira = new Jira({
-		host,
-		email,
-		token
-	});
+  const jira = new Jira({
+    host,
+    email,
+    token,
+  });
 
-	const check = await jira.check();
+  const check = await jira.check();
 
-	if (!check) {
-		ErrorExit.trigger(ErrorExit.INIT);
-	}
+  if (!check) {
+    ErrorExit.trigger(ErrorExit.INIT);
+  }
 }
 
-main()
+main();
