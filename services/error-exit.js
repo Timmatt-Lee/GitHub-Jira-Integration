@@ -1,7 +1,7 @@
 class ErrorExit {
-  static ErrorType(code, msg) {
+  static ErrorType(status, message) {
     return {
-      code,
+      status,
       message,
     };
   }
@@ -11,8 +11,7 @@ class ErrorExit {
   }
 
   static trigger(e) {
-    console.error(e);
-    process.exit(e.code);
+    process.exit(e.status);
   }
 }
 
