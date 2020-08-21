@@ -11,6 +11,7 @@ class ErrorExit {
   }
 
   static trigger(e) {
+    console.error(e);
     process.exit(e.status);
   }
 }
