@@ -25,3 +25,4 @@ jobs:
         component: ${{ secrets.JIRA_COMPONENT_NAME }}
         type: ${{ secrets.JIRA_ISSUE_TYPE }}
         board: ${{ secrets.JIRA_BOARD_ID }}
+        transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}

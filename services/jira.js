@@ -1,7 +1,7 @@
 'user strict';
 
 const axios = require('axios');
-const ErrorExit = require('./error-exit');
+const ErrorExit = require('./fail');
 
 class Jira {
   constructor({
