@@ -1,8 +1,11 @@
 'use strict';
 
 const core = require('@actions/core');
+const github = require('@actions/github');
 const Jira = require('./services/jira');
 const ErrorExit = require('./services/errorExit');
+
+const payload = JSON.stringify(github.context.payload, undefined, 2)
 
 const githubEvent = require(process.env.GITHUB_EVENT_PATH);
 
