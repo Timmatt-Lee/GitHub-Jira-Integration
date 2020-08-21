@@ -12,6 +12,7 @@ async function main() {
   const type = core.getInput('type');
   const board = core.getInput('board');
   const transition = core.getInput('transition');
+  const githubToken = core.getInput('githubToken');
 
   const jira = new Jira({
     host,
@@ -45,6 +46,20 @@ async function main() {
     const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
 
     await jira.postMoveIssuesToSprint([issue.key], activeSprintId);
+
+    const newPR = {
+      owner: github.context.repo.owner,
+      repo: github.context.repo.repo,
+      pull_number: github.context.payload.pull_request.number,
+      title: `[${issue.key}] github.context.payload.pull_request.title`,
+      body: `(link to ${issue.key})[host/browse/${issue.key}]
+        github.context.payload.pull_request.body`,
+    };
+
+    const client = new github.GitHub(githubToken);
+    const response = await client.pulls.update(newPR);
+
+    if (response.status !== 200) { core.error(JSON.stringify(response)); }
   } catch (e) { core.setFailed(e); }
 }
 
