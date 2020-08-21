@@ -23,7 +23,7 @@ async function main() {
 	const check = await jira.check();
 
 	if (!check) {
-		new ErrorExit(ErrorExit.INIT);
+		ErrorExit.trigger(ErrorExit.INIT);
 	}
 }
 

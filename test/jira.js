@@ -15,16 +15,23 @@ chai.should();
 const host = process.env.HOST;
 const email = process.env.EMAIL;
 const token = process.env.TOKEN;
+const project = process.env.PROJECT;
 
 const jira = new Jira({
     host,
     email,
-    token
+    token,
+    project
 });
 
 describe('jira', function () {
     it('init', async function () {
-        const check = await jira.check();
-        expect(check).to.not.equal(null);
+        const result = await jira.check();
+        expect(result).to.not.equal(null);
+    });
+
+    it('versions', async function () {
+        const result = await jira.getVersions();
+        expect(result).to.not.equal(null);
     });
 });

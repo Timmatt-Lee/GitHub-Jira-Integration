@@ -2,7 +2,7 @@ class ErrorExit {
     static ErrorType(code, msg) {
         return {
             code,
-            msg
+            message
         };
     }
 
@@ -10,8 +10,8 @@ class ErrorExit {
         return this.ErrorType(100, 'Jira init error');
     }
 
-    constructor(e) {
-        console.error(new Error(e.msg));
+    static trigger(e) {
+        console.error(e);
         process.exit(e.code);
     }
 }
