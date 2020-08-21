@@ -1,7 +1,7 @@
 'user strict';
 
 const axios = require('axios');
-const ErrorExit = require('./error-exit');
+const core = require('@actions/core');
 
 class Jira {
   constructor({
@@ -33,7 +33,7 @@ class Jira {
   }
 
   async getVersionIdByPrefix() {
-    const { data: versions } = await this.getVersions();
+    const versions = await this.getVersions();
     const { id } = versions.find((v) => v.name.startsWith(this.version));
     return id;
   }
@@ -68,7 +68,7 @@ class Jira {
   }
 
   async getTransitionIdByName(issue, name) {
-    const { data: { transitions } } = await this.getTransitions(issue);
+    const { transitions } = await this.getTransitions(issue);
     const { id } = transitions.find((t) => t.name === name);
     return id;
   }
@@ -105,7 +105,7 @@ class Jira {
   async request(api, method = 'get', data = {}) {
     const url = `${this.host}${api}`;
 
-    const result = await axios({
+    const { data: result } = await axios({
       url,
       method,
       data,
@@ -113,7 +113,7 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch(ErrorExit.trigger);
+    }).catch((e) => core.setFailed(JSON.stringify(e)));
 
     return result;
   }

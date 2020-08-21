@@ -1,29 +1,51 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const Jira = require('./services/jira');
-const ErrorExit = require('./services/error-exit');
-
-const payload = JSON.stringify(github.context.payload, undefined, 2);
-
-// eslint-disable-next-line import/no-dynamic-require
-const githubEvent = require(process.env.GITHUB_EVENT_PATH);
 
 async function main() {
   const host = core.getInput('host');
-  const token = core.getInput('token');
   const email = core.getInput('email');
+  const token = core.getInput('token');
+  const project = core.getInput('project');
+  const version = core.getInput('version');
+  const component = core.getInput('component');
+  const type = core.getInput('type');
+  const board = core.getInput('board');
+  const transition = core.getInput('transition');
 
   const jira = new Jira({
     host,
     email,
     token,
+    project,
+    version,
+    component,
+    type,
+    board,
   });
 
-  const check = await jira.check();
+  try {
+    const issue = await jira.postIssue(github.context.payload.pull_request.title);
 
-  if (!check) {
-    ErrorExit.trigger(ErrorExit.INIT);
-  }
+    await jira.postTransitIssue(issue.key, transition);
+
+    await jira.postComment(issue.key, {
+      type: 'doc',
+      version: 1,
+      content: [
+        {
+          type: 'blockCard',
+          attrs: {
+            url: github.context.payload.pull_request.html_url,
+          },
+        },
+      ],
+    });
+
+    const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
+
+    await jira.postMoveIssuesToSprint([issue.key], activeSprintId);
+  } catch (e) { core.setFailed(e); }
 }
 
 main();
