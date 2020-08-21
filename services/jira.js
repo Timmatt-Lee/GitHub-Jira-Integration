@@ -80,11 +80,9 @@ class Jira {
     });
   }
 
-  async postComment(issue, content) {
+  async postComment(issue, body) {
     return this.request(`/rest/api/3/issue/${issue}/comment`, 'post', {
-      transition: {
-        id,
-      },
+      body,
     });
   }
 

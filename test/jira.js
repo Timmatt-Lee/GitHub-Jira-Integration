@@ -45,7 +45,7 @@ describe('jira', () => {
 
   it('create issue', async () => {
     const { status } = await jira.postIssue('title of issue');
-    expect(status).to.not.equal(null);
+    expect(status).equal(201);
   });
 });
 
@@ -57,7 +57,7 @@ describe('jira issue', () => {
 
   it('all transitions', async () => {
     const { status } = await jira.getTransitions(this.issue.key);
-    expect(status).to.not.equal(null);
+    expect(status).equal(200);
   });
 
   it('transition id', async () => {
@@ -66,7 +66,23 @@ describe('jira issue', () => {
   });
 
   it('transit issue', async () => {
-    const id = await jira.postTransitIssue(this.issue.key, process.env.TRANSITION);
-    expect(id).to.not.equal(null);
+    const { status } = await jira.postTransitIssue(this.issue.key, process.env.TRANSITION);
+    expect(status).equal(204);
+  });
+
+  it('comment with a github pull request block', async () => {
+    const { status } = await jira.postComment(this.issue.key, {
+      type: 'doc',
+      version: 1,
+      content: [
+        {
+          type: 'blockCard',
+          attrs: {
+            url: 'https://github.com/Timmatt-Lee/Github-Jira-Integration/pulls/1',
+          },
+        },
+      ],
+    });
+    expect(status).equal(201);
   });
 });
