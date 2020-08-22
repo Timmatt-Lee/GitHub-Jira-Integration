@@ -21,6 +21,5 @@ jobs:
         host: ${{ secrets.JIRA_BASE_URL }}
         email: ${{ secrets.JIRA_USER_EMAIL }}
         token: ${{ secrets.JIRA_API_TOKEN }}
-        project1: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
         isOnlyTransition: true
