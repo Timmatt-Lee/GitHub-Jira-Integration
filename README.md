@@ -138,8 +138,10 @@ npm run build
 
 ## Contributing
 
-Any suggestions or bug report is welcomed to open an issue! For code contribution, check [Contributing Guide](CONTRIBUTING.md).
+Any suggestions or bug report is welcomed to open an issue!
+
+For code contribution, check [Contributing Guide](CONTRIBUTING.md).
 
 ## License
 
-[ISC](LICENSE) © 2019 [Timmatt-Lee](https://github.org/Timmatt-Lee)
+[ISC](LICENSE) © 2020 [Timmatt-Lee](https://github.com/Timmatt-Lee)
