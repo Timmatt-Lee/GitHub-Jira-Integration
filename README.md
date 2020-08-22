@@ -17,7 +17,7 @@ Resolve it once merged.
 1. auto insert created issue key into title and desc
 ![create-jira-issue(github-after)](img/create-jira-issue(github-after).jpg)
 1. auto create Jira issue with same title
-1. and `component`, `fix version`, `active sprint`
+1. add `component`, `fix version`, `active sprint`
 1. record github pull request url
 ![create-jira-issue(jira-after)](img/create-jira-issue(jira-after).jpg)
 
