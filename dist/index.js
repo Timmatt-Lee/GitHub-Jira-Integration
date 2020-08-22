@@ -1725,6 +1725,8 @@ async function main() {
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
   const isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
 
+  if (isCreateIssue && !type) throw new Error('Creating issue need type');
+
   const jira = new Jira({
     host,
     email,
