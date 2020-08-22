@@ -23,4 +23,3 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
-        isCreateIssue: false
