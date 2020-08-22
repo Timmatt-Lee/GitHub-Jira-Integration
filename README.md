@@ -55,7 +55,7 @@ jobs:
     name: Pull Request and Jira issue integration
     runs-on: ubuntu-latest
     steps:
-    - name: Integration
+    - name: Pull Request and Jira issue integration
       uses: Timmatt-Lee/Github-Jira-Integration@master
       with:
         host: ${{ secrets.JIRA_BASE_URL }}
@@ -63,13 +63,15 @@ jobs:
         token: ${{ secrets.JIRA_API_TOKEN }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         project: ${{ secrets.JIRA_PROJECT_NAME }}
-        version: ${{ secrets.JIRA_VERSION_PREFIX }}
-        component: ${{ secrets.JIRA_COMPONENT_NAME }}
-        type: ${{ secrets.JIRA_ISSUE_TYPE }}
-        board: ${{ secrets.JIRA_BOARD_ID }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
-        # add below if you don't want auto create
-        isNotCreateIssue: false
+        # required if you want to create issue
+        type: ${{ secrets.JIRA_ISSUE_TYPE }}
+        # belows are optional, for created issue
+        component: ${{ secrets.JIRA_COMPONENT_NAME }}
+        version: ${{ secrets.JIRA_VERSION_PREFIX }}
+        board: ${{ secrets.JIRA_BOARD_ID }}
+        # if you don't want to auto create issue
+        isCreateIssue: false
 ```
 
 Create `.github/workflows/merge-jira.yml`:
@@ -89,7 +91,7 @@ jobs:
     if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
-    - name: Integration
+    - name: Transit Jira issue
       uses: Timmatt-Lee/Github-Jira-Integration@master
       with:
         host: ${{ secrets.JIRA_BASE_URL }}
@@ -100,41 +102,19 @@ jobs:
         isOnlyTransition: true
 ```
 
-`body-template` can be set to a GitHub secret if necessary to avoid leaking sensitive data in the URLs for instance. `body-template: ${{ secrets.PR_BODY_PREFIX_TEMPLATE }}`
+Create GitHub Secrets
+![github-secrets](img/github-secrets.jpg)
+_**NOTE**_: you need admin authorization of your repo
 
-_**NOTE**: template values must contain the `%branch%` token (can occur multiple times) so that it can be replaced with the matched text from the branch name._
+- `JIRA_BASE_URL`: `https://your-domain.atlassian.net`
+- `JIRA_USER_EMAIL`: your jira email
+- `JIRA_API_TOKEN`: [Create Here](https://id.atlassian.com/manage-profile/security/api-tokens)
+- `JIRA_PROJECT_NAME`: short name of your project(eg. `My Project (MP)`, `MP` is the project name)
+- `JIRA_ISSUE_TYPE`: eg. `Task`, `Story`...
+- `JIRA_BOARD_ID`: for creating issue auto attach to active sprint ![jira-board-id](img/jira-board-id.jpg)
+- `JIRA_COMPONENT_NAME`: component name that creating issue attach to
+- `JIRA_VERSION_PREFIX `: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1` 
+- `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
+- `JIRA_PR_TRANSITION_NAME`: eg. `In Progress`
 
-## Example
-
-So the following yaml
-
-```
-name: "Update Pull Request"
-on: pull_request
-
-jobs:
-  pr_update_text:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: tzkhan/pr-update-action@v1.1.1
-      with:
-        repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        branch-regex: 'foo-\d+'
-        lowercase-branch: false
-        title-template: '[%branch%]'
-        replace-title: false
-        title-prefix-space: true
-        uppercase-title: true
-        body-template: '[Link to %branch%](https://url/to/browse/ticket/%branch%)'
-        replace-body: false
-        body-prefix-newline-count: 2
-        uppercase-body: true
-```
-
-produces this effect... :point_down:
-
-#### before:
-![pr before](img/pr-before.png)
-
-#### after:
-![pr after](img/pr-after.png)
+_**NOTE**_: you can rename yourself, but don't forget to change corresponding argument name in `.yml`
