@@ -45,9 +45,11 @@ async function main() {
     const issue = await jira.postIssue(pr.title);
     key = issue.key;
 
-    // move card to active sprint
-    const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
-    await jira.postMoveIssuesToSprint([key], activeSprintId);
+    if (board) {
+      // move card to active sprint
+      const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
+      await jira.postMoveIssuesToSprint([key], activeSprintId);
+    }
   }
 
   if (!key) {

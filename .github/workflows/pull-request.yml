@@ -21,10 +21,5 @@ jobs:
         email: ${{ secrets.JIRA_USER_EMAIL }}
         token: ${{ secrets.JIRA_API_TOKEN }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
-        project: ${{ secrets.JIRA_PROJECT_NAME }}
-        version: ${{ secrets.JIRA_VERSION_PREFIX }}
-        component: ${{ secrets.JIRA_COMPONENT_NAME }}
-        type: ${{ secrets.JIRA_ISSUE_TYPE }}
-        board: ${{ secrets.JIRA_BOARD_ID }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
         isCreateIssue: false
