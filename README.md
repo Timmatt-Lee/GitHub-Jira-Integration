@@ -43,7 +43,7 @@ Resolve it once merged.
 
 ### Create GitHub Action
 
-Create `.github/workflows/pr-jira.yml`:
+Create `.github/workflows/pr-jira.yml`
 
 ```{yml}
 on:
@@ -75,7 +75,7 @@ jobs:
         isCreateIssue: false                                # optional, if you don't want to auto create issue
 ```
 
-Create `.github/workflows/merge-jira.yml`:
+Create `.github/workflows/merge-jira.yml`
 
 ```{yml}
 on:
