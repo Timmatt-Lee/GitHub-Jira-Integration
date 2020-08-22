@@ -1,6 +1,6 @@
 on:
   pull_request:
-    types: [opened]
+    types: [reopened]
     branches:
       - master
 
@@ -26,4 +26,3 @@ jobs:
         component: ${{ secrets.JIRA_COMPONENT_NAME }}
         board: ${{ secrets.JIRA_BOARD_ID }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
-        isCreateIssue: false
