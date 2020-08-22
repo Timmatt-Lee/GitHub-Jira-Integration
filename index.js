@@ -33,6 +33,8 @@ async function main() {
       core.setFailed('Only support pull request trigger');
     }
 
+    core.info(pr.title);
+
     let key = '';
 
     // if title has a [AB-1234] like Jira issue tag
