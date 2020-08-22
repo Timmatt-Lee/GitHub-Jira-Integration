@@ -407,28 +407,21 @@ class Jira {
   }
 
   async postIssue(summary) {
-    const id = await this.getVersionIdByPrefix();
-    return this.request('/rest/api/3/issue', 'post', {
+    const data = {
       fields: {
         summary,
         project: {
           key: this.project,
         },
-        issuetype: {
-          name: this.type,
-        },
-        components: [
-          {
-            name: this.component,
-          },
-        ],
-        fixVersions: [
-          {
-            id,
-          },
-        ],
       },
-    });
+    };
+    if (this.type) data.fields.issuetype = { name: this.type };
+    if (this.component) data.fields.components = { name: this.component };
+    if (this.version) {
+      const id = await this.getVersionIdByPrefix();
+      data.fields.fixVersions = { id };
+    }
+    return this.request('/rest/api/3/issue', 'post', data);
   }
 
   async getTransitions(issue) {
@@ -1761,9 +1754,11 @@ async function main() {
     const issue = await jira.postIssue(pr.title);
     key = issue.key;
 
-    // move card to active sprint
-    const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
-    await jira.postMoveIssuesToSprint([key], activeSprintId);
+    if (board) {
+      // move card to active sprint
+      const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
+      await jira.postMoveIssuesToSprint([key], activeSprintId);
+    }
   }
 
   if (!key) {
