@@ -14,32 +14,32 @@ Resolve it once merged.
 
 1. create a pull request
 
-<img src="imgs/create-jira-issue(github-before).jpg" style="padding: 5px;border: solid 1px #EFEFEF;-moz-box-shadow: 2px 1px 5px #999;-webkit-box-shadow: 2px 1px 5px #999;box-shadow: 2px 1px 5px #999;">
+<img src="img/create-jira-issue(github-before).png" style="padding: 5px;border: solid 1px #EFEFEF;-moz-box-shadow: 2px 1px 5px #999;-webkit-box-shadow: 2px 1px 5px #999;box-shadow: 2px 1px 5px #999;">
 
 1. auto insert created issue key into title and desc
-![create-jira-issue(github-after)](imgs/create-jira-issue(github-after).jpg)
+![create-jira-issue(github-after)](img/create-jira-issue(github-after).png)
 1. auto create Jira issue with same title
 1. add `component`, `fix version`, `active sprint`
 1. record github pull request url
-![create-jira-issue(jira-after)](imgs/create-jira-issue(jira-after).jpg)
+![create-jira-issue(jira-after)](img/create-jira-issue(jira-after).png)
 
 ### Pull Request with Existed Jira issue
 
 1. here is an existed Jira issue
-![existed-jira-issue(jira-before)](imgs/existed-jira-issue(jira-before).jpg)
+![existed-jira-issue(jira-before)](img/existed-jira-issue(jira-before).png)
 1. create a pull request titled with Jira issue key
-![existed-jira-issue(github-before)](imgs/existed-jira-issue(github-before).jpg)
+![existed-jira-issue(github-before)](img/existed-jira-issue(github-before).png)
 1. auto insert Jira issue link into desc
-![existed-jira-issue(github-after)](imgs/existed-jira-issue(github-after).jpg)
+![existed-jira-issue(github-after)](img/existed-jira-issue(github-after).png)
 1. auto transit Jira issue
 1. record github pull request url
-![existed-jira-issue(jira-after)](imgs/existed-jira-issue(jira-after).jpg)
+![existed-jira-issue(jira-after)](img/existed-jira-issue(jira-after).png)
 
 ### Merge and Resolve Jira issue
 
 1. after merging pull request
 1. corresponding Jira issue got auto transited
-![resolve-jira-issue(jira-after)](imgs/resolve-jira-issue(jira-after).jpg)
+![resolve-jira-issue(jira-after)](img/resolve-jira-issue(jira-after).png)
 
 ## Usage
 
@@ -109,7 +109,7 @@ jobs:
 ```
 
 Create GitHub Secrets
-![github-secrets](imgs/github-secrets.jpg)
+![github-secrets](img/github-secrets.png)
 _**NOTE**_: you need admin authorization of your repo
 
 - `JIRA_BASE_URL`: `https://your-domain.atlassian.net`
@@ -117,7 +117,7 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_API_TOKEN`: [Create Here](https://id.atlassian.com/manage-profile/security/api-tokens)
 - `JIRA_PROJECT_NAME`: short name of your project(eg. `My Project (MP)`, `MP` is the project name)
 - `JIRA_ISSUE_TYPE`: eg. `Task`, `Story`...
-- `JIRA_BOARD_ID`: for creating issue auto attach to active sprint ![jira-board-id](imgs/jira-board-id.jpg)
+- `JIRA_BOARD_ID`: for creating issue auto attach to active sprint ![jira-board-id](img/jira-board-id.png)
 - `JIRA_COMPONENT_NAME`: component name that creating issue attach to
 - `JIRA_VERSION_PREFIX `: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1` 
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
