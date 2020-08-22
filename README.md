@@ -1,9 +1,6 @@
 # Github-Jira-Integration
 
-[![GitHub Release](https://img.shields.io/github/release/tterb/PlayMusic.svg?style=flat)](https://github.com/Timmatt-Lee/Github-Jira-Integration/releases/latest)
-[![Dependency Status](https://david-dm.org/tterb/Hyde.svg)](https://david-dm.org/tterb/Hyde)  
-[![devDependencies Status](https://david-dm.org/tterb/Hyde/dev-status.svg)](https://david-dm.org/tterb/Hyde?type=dev)  
-[![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)  
+[![GitHub Release](https://img.shields.io/github/release/Timmatt-Lee/Github-Jira-Integration.svg?style=flat)](https://github.com/Timmatt-Lee/Github-Jira-Integration/releases/latest) [![Dependency Status](https://david-dm.org/Timmatt-Lee/Github-Jira-Integration.svg)](https://david-dm.org/tterb/Hyde) [![devDependencies Status](https://david-dm.org/Timmatt-Lee/Github-Jira-Integration/dev-status.svg)](https://david-dm.org/tterb/Hyde?type=dev) [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://github.com/Timmatt-Lee/Github-Jira-Integration/pulls)
 
 Tired of switching tabs between GitHub and Jira?
 
