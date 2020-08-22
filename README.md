@@ -1,6 +1,9 @@
 # Github-Jira-Integration
 
 [![GitHub Release](https://img.shields.io/github/release/tterb/PlayMusic.svg?style=flat)](https://github.com/Timmatt-Lee/Github-Jira-Integration/releases/latest)
+[![Dependency Status](https://david-dm.org/tterb/Hyde.svg)](https://david-dm.org/tterb/Hyde)  
+[![devDependencies Status](https://david-dm.org/tterb/Hyde/dev-status.svg)](https://david-dm.org/tterb/Hyde?type=dev)  
+[![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)  
 
 Tired of switching tabs between GitHub and Jira?
 
@@ -45,7 +48,7 @@ Resolve it once merged.
 
 Create `.github/workflows/pr-jira.yml`
 
-```{yml}
+```yml
 on:
   pull_request:
     types: [opened]
@@ -77,7 +80,7 @@ jobs:
 
 Create `.github/workflows/merge-jira.yml`
 
-```{yml}
+```yml
 on:
   pull_request:
     types: [closed]
@@ -112,10 +115,31 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_API_TOKEN`: [Create Here](https://id.atlassian.com/manage-profile/security/api-tokens)
 - `JIRA_PROJECT_NAME`: short name of your project(eg. `My Project (MP)`, `MP` is the project name)
 - `JIRA_ISSUE_TYPE`: eg. `Task`, `Story`...
-- `JIRA_BOARD_ID`: for creating issue auto attach to active sprint, you can see it in url of _Active sprint_ ![jira-board-id](img/jira-board-id.png)
+- `JIRA_BOARD_ID`: for creating issue auto attach to active sprint, you can see it in url of _Active sprints_ ![jira-board-id](img/jira-board-id.png)
 - `JIRA_COMPONENT_NAME`: component name that creating issue attach to
 - `JIRA_VERSION_PREFIX`: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1`
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
 - `JIRA_PR_TRANSITION_NAME`: eg. `In Progress`
 
-_**NOTE**_: you can rename yourself, but don't forget to change corresponding argument name in `.yml`
+_**NOTE**_: you can rename secrets, but don't forget to change corresponding arguments in `.yml`
+
+## Build
+
+```sh
+# Install dependencies
+npm install
+
+# Run the tests
+npm test
+
+# Build script
+npm run build
+```
+
+## Contributing
+
+Any suggestions or bug report is welcomed to open an issue! For code contribution, check [Contributing Guide](CONTRIBUTING.md).
+
+## License
+
+[ISC](LICENSE) © 2019 [Timmatt-Lee](https://github.org/Timmatt-Lee)
