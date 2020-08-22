@@ -27,73 +27,69 @@ async function main() {
     board,
   });
 
-  try {
-    const pr = github.context.payload.pull_request;
-    if (!pr) {
-      core.setFailed('Only support pull request trigger');
-    }
-
-    let key = '';
-
-    // if title has a [AB-1234] like Jira issue tag
-    const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
-    core.info(keyWithBracket);
-    if (keyWithBracket) {
-      key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
-    } else {
-      if (isNotCreateIssue) { process.exit(0); }
-      if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
-
-      const issue = await jira.postIssue(pr.title);
-      key = issue.key;
-
-      // move card to active sprint
-      const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
-      await jira.postMoveIssuesToSprint([key], activeSprintId);
-    }
-
-    if (!key) {
-      core.setFailed('Issue key parse error');
-    }
-
-    await jira.postTransitIssue(key, transition);
-
-    if (isOnlyTransition) { process.exit(0); }
-
-    await jira.postComment(key, {
-      type: 'doc',
-      version: 1,
-      content: [
-        {
-          type: 'blockCard',
-          attrs: {
-            url: pr.html_url,
-          },
-        },
-      ],
-    });
-
-    // update pull request title and desc
-    const newPR = {
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      pull_number: pr.number,
-      title: `[${key}] ${pr.title}`,
-      body: `[${key}](${host}/browse/${key})\n${pr.body}`,
-    };
-
-    // if title already has jira issue, no need to update it
-    if (keyWithBracket) {
-      delete newPR.title;
-    }
-
-    const octokit = github.getOctokit(githubToken);
-    const response = await octokit.pulls.update(newPR);
-
-    if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
-  } catch (e) {
-    core.setFailed(e);
+  const pr = github.context.payload.pull_request;
+  if (!pr) {
+    core.setFailed('Only support pull request trigger');
   }
+
+  let key = '';
+
+  // if title has a [AB-1234] like Jira issue tag
+  const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
+  core.info(keyWithBracket);
+  if (keyWithBracket) {
+    key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
+  } else {
+    if (isNotCreateIssue) { process.exit(0); }
+    if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
+
+    const issue = await jira.postIssue(pr.title);
+    key = issue.key;
+
+    // move card to active sprint
+    const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
+    await jira.postMoveIssuesToSprint([key], activeSprintId);
+  }
+
+  if (!key) {
+    core.setFailed('Issue key parse error');
+  }
+
+  await jira.postTransitIssue(key, transition);
+
+  if (isOnlyTransition) { process.exit(0); }
+
+  await jira.postComment(key, {
+    type: 'doc',
+    version: 1,
+    content: [
+      {
+        type: 'blockCard',
+        attrs: {
+          url: pr.html_url,
+        },
+      },
+    ],
+  });
+
+  // update pull request title and desc
+  const newPR = {
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    pull_number: pr.number,
+    title: `[${key}] ${pr.title}`,
+    body: `[${key}](${host}/browse/${key})\n${pr.body}`,
+  };
+
+  // if title already has jira issue, no need to update it
+  if (keyWithBracket) {
+    delete newPR.title;
+  }
+
+  const octokit = github.getOctokit(githubToken);
+  const response = await octokit.pulls.update(newPR);
+
+  if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
 }
 
-main();
+main().catch(core.setFailed);
