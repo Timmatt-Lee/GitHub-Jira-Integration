@@ -49,10 +49,10 @@ class Jira {
       },
     };
     if (this.type) data.fields.issuetype = { name: this.type };
-    if (this.component) data.fields.components = { name: this.component };
+    if (this.component) data.fields.components = [{ name: this.component }];
     if (this.version) {
       const id = await this.getVersionIdByPrefix();
-      data.fields.fixVersions = { id };
+      data.fields.fixVersions = [{ id }];
     }
     return this.request('/rest/api/3/issue', 'post', data);
   }

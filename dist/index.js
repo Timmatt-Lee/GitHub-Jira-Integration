@@ -416,10 +416,10 @@ class Jira {
       },
     };
     if (this.type) data.fields.issuetype = { name: this.type };
-    if (this.component) data.fields.components = { name: this.component };
+    if (this.component) data.fields.components = [{ name: this.component }];
     if (this.version) {
       const id = await this.getVersionIdByPrefix();
-      data.fields.fixVersions = { id };
+      data.fields.fixVersions = [{ id }];
     }
     return this.request('/rest/api/3/issue', 'post', data);
   }
@@ -1724,6 +1724,8 @@ async function main() {
   const board = core.getInput('board');
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
   const isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
+
+  if (isCreateIssue && !type) throw new Error('Creating issue need type');
 
   const jira = new Jira({
     host,
