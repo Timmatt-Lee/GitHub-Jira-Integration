@@ -122,3 +122,14 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_PR_TRANSITION_NAME`: eg. `In Progress`
 
 _**NOTE**_: you can rename yourself, but don't forget to change corresponding argument name in `.yml`
+
+(setq markdown-xhtml-header-content
+"<style type='text/css'>
+img {
+    padding: 5px;
+    border: solid 1px #EFEFEF;
+    -moz-box-shadow: 2px 1px 5px #999;
+    -webkit-box-shadow: 2px 1px 5px #999;
+    box-shadow: 2px 1px 5px #999;
+}
+</style>")
