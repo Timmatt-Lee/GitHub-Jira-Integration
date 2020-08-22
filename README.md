@@ -112,7 +112,7 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_API_TOKEN`: [Create Here](https://id.atlassian.com/manage-profile/security/api-tokens)
 - `JIRA_PROJECT_NAME`: short name of your project(eg. `My Project (MP)`, `MP` is the project name)
 - `JIRA_ISSUE_TYPE`: eg. `Task`, `Story`...
-- `JIRA_BOARD_ID`: for creating issue auto attach to active sprint ![jira-board-id](img/jira-board-id.png)
+- `JIRA_BOARD_ID`: for creating issue auto attach to active sprint, you can see it in url of _Active sprint_ ![jira-board-id](img/jira-board-id.png)
 - `JIRA_COMPONENT_NAME`: component name that creating issue attach to
 - `JIRA_VERSION_PREFIX`: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1`
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
