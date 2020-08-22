@@ -1719,16 +1719,16 @@ const github = __webpack_require__(660);
 const Jira = __webpack_require__(13);
 
 async function main() {
-  const host = core.getInput('host');
-  const email = core.getInput('email');
-  const token = core.getInput('token');
-  const project = core.getInput('project');
+  const host = core.getInput('host', { required: true });
+  const email = core.getInput('email', { required: true });
+  const token = core.getInput('token', { required: true });
+  const project = core.getInput('project', { required: true });
+  const transition = core.getInput('transition', { required: true });
+  const githubToken = core.getInput('githubToken');
   const version = core.getInput('version');
   const component = core.getInput('component');
   const type = core.getInput('type');
   const board = core.getInput('board');
-  const transition = core.getInput('transition');
-  const githubToken = core.getInput('githubToken');
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
   const isNotCreateIssue = core.getInput('isNotCreateIssue').toLowerCase() === 'true';
 

@@ -7,18 +7,21 @@ inputs:
   host:
     description: Domain of your jira host
     required: true
-  githubToken:
-    description: Your github token
-    required: true
   email:
     description: Your jira email address
     required: true
   token:
     description: Your jira access token
-    required: false
+    required: true
   project:
     description: Project Short Name
     required: true
+  transition:
+    description: Transition name that issue take
+    required: true
+  githubToken:
+    description: Your github token
+    required: false
   version:
     description: Version Prefix that new issue attach to 
     required: false
@@ -31,9 +34,6 @@ inputs:
   board:
     description: Sprint query that new issue need to
     required: false
-  transition:
-    description: Transition name that issue take
-    required: true
   isOnlyTransition:
     description: Only process transition to Jira issue
     required: false
