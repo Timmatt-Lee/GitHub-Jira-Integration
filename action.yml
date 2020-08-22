@@ -7,9 +7,6 @@ inputs:
   host:
     description: Domain of your jira host
     required: true
-  githubToken:
-    description: Your github token
-    required: true
   email:
     description: Your jira email address
     required: true
@@ -19,6 +16,12 @@ inputs:
   project:
     description: Project Short Name
     required: true
+  transition:
+    description: Transition name that issue take
+    required: true
+  githubToken:
+    description: Your github token
+    required: false
   version:
     description: Version Prefix that new issue attach to 
     required: false
@@ -31,9 +34,14 @@ inputs:
   board:
     description: Sprint query that new issue need to
     required: false
-  transition:
-    description: Transition name that issue take
+  isOnlyTransition:
+    description: Only process transition to Jira issue
     required: false
+    default: false
+  isNotCreateIssue:
+    description: Do not create issue in any circumstances
+    required: false
+    default: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
