@@ -2,7 +2,11 @@
 
 [![GitHub Release](https://img.shields.io/github/release/tterb/PlayMusic.svg?style=flat)](https://github.com/Timmatt-Lee/Github-Jira-Integration/releases/latest)
 
-Tired of switching tabs between GitHub and Jira? With this GitHub Action, a pull request will transit Jira issue and bind links on each other; resolve it once merged.
+Tired of switching tabs between GitHub and Jira?
+
+With this GitHub Action, a pull request will transit Jira issue and bind links on each other
+
+Resolve it once merged.
 
 ## Demo
 
@@ -19,7 +23,7 @@ Tired of switching tabs between GitHub and Jira? With this GitHub Action, a pull
 
 ### Pull Request with Existed Jira issue
 
-1. here is a existed Jira issue
+1. here is an existed Jira issue
 ![existed-jira-issue(jira-before)](img/existed-jira-issue(jira-before).jpg)
 1. create a pull request titled with Jira issue key
 ![existed-jira-issue(github-before)](img/existed-jira-issue(github-before).jpg)
