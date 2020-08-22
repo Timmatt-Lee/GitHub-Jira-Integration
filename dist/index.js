@@ -1752,7 +1752,6 @@ async function main() {
 
   // if title has a [AB-1234] like Jira issue tag
   const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
-  core.info(keyWithBracket);
   if (keyWithBracket) {
     key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
   } else {
