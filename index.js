@@ -14,7 +14,7 @@ async function main() {
   const type = core.getInput('type');
   const board = core.getInput('board');
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
-  const isNotCreateIssue = core.getInput('isNotCreateIssue').toLowerCase() === 'true';
+  const isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
 
   const jira = new Jira({
     host,
@@ -34,12 +34,12 @@ async function main() {
 
   let key = '';
 
-  // if title has a [AB-1234] like Jira issue tag
+  // if title has a [AB-1234] like Jira issue key
   const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
   if (keyWithBracket) {
     key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
   } else {
-    if (isNotCreateIssue) { process.exit(0); }
+    if (!isCreateIssue) { process.exit(0); }
     if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
 
     const issue = await jira.postIssue(pr.title);

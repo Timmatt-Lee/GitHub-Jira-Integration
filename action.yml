@@ -38,10 +38,10 @@ inputs:
     description: Only process transition to Jira issue
     required: false
     default: false
-  isNotCreateIssue:
-    description: Do not create issue in any circumstances
+  isCreateIssue:
+    description: auto create issue
     required: false
-    default: false
+    default: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
