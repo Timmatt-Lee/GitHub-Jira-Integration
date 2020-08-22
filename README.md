@@ -13,7 +13,7 @@ Resolve it once merged.
 ### Pull Request and Create Jira issue
 
 1. create a pull request
-![create-jira-issue(github-before)](imgs/create-jira-issue(github-before).jpg)
+<img src="imgs/create-jira-issue(github-before).jpg" style="padding: 5px;border: solid 1px #EFEFEF;-moz-box-shadow: 2px 1px 5px #999;-webkit-box-shadow: 2px 1px 5px #999;box-shadow: 2px 1px 5px #999;">
 1. auto insert created issue key into title and desc
 ![create-jira-issue(github-after)](imgs/create-jira-issue(github-after).jpg)
 1. auto create Jira issue with same title
@@ -122,14 +122,3 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_PR_TRANSITION_NAME`: eg. `In Progress`
 
 _**NOTE**_: you can rename yourself, but don't forget to change corresponding argument name in `.yml`
-
-(setq markdown-xhtml-header-content
-"<style type='text/css'>
-img {
-    padding: 5px;
-    border: solid 1px #EFEFEF;
-    -moz-box-shadow: 2px 1px 5px #999;
-    -webkit-box-shadow: 2px 1px 5px #999;
-    box-shadow: 2px 1px 5px #999;
-}
-</style>")
