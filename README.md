@@ -68,14 +68,11 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
-        # required if you want to create issue
-        type: ${{ secrets.JIRA_ISSUE_TYPE }}
-        # belows are optional, for created issue
-        component: ${{ secrets.JIRA_COMPONENT_NAME }}
-        version: ${{ secrets.JIRA_VERSION_PREFIX }}
-        board: ${{ secrets.JIRA_BOARD_ID }}
-        # if you don't want to auto create issue
-        isCreateIssue: false
+        type: ${{ secrets.JIRA_ISSUE_TYPE }}                # optional, but required if you want to create issue
+        component: ${{ secrets.JIRA_COMPONENT_NAME }}       # optional, created issue property
+        version: ${{ secrets.JIRA_VERSION_PREFIX }}         # optional, created issue property
+        board: ${{ secrets.JIRA_BOARD_ID }}                 # optional, sprint detection for created issue
+        isCreateIssue: false                                # optional, if you don't want to auto create issue
 ```
 
 Create `.github/workflows/merge-jira.yml`:
@@ -117,7 +114,7 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_ISSUE_TYPE`: eg. `Task`, `Story`...
 - `JIRA_BOARD_ID`: for creating issue auto attach to active sprint ![jira-board-id](img/jira-board-id.png)
 - `JIRA_COMPONENT_NAME`: component name that creating issue attach to
-- `JIRA_VERSION_PREFIX `: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1` 
+- `JIRA_VERSION_PREFIX`: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1`
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
 - `JIRA_PR_TRANSITION_NAME`: eg. `In Progress`
 
