@@ -24,7 +24,6 @@ async function main() {
     throw new Error('Creating issue need type');
   }
 
-  
   const jira = new Jira({
     host,
     email,
@@ -50,27 +49,27 @@ async function main() {
   } else {
     if (!isCreateIssue) { process.exit(0); }
     if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
-    
+
     const userId = await jira.getUserIdByFuzzyName(github.context.actor).catch(core.info);
 
     const issue = await jira.postIssue(githubToken, userId);
     key = issue.key;
-    
+
     if (board) {
       // move card to active sprint
       const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
       await jira.postMoveIssuesToSprint([key], activeSprintId);
     }
   }
-  
+
   if (!key) {
     core.setFailed('Issue key parse error');
   }
-  
+
   await jira.postTransitIssue(key, transition);
-  
+
   if (isOnlyTransition) { process.exit(0); }
-  
+
   await jira.postComment(key, {
     type: 'doc',
     version: 1,
@@ -83,7 +82,7 @@ async function main() {
       },
     ],
   });
-  
+
   // update pull request title and desc
   const newPR = {
     owner: github.context.repo.owner,
@@ -91,12 +90,12 @@ async function main() {
     pull_number: pr.number,
     body: `[${key}](${host}/browse/${key})\n${pr.body}`,
   };
-  
+
   // if title has no jira issue, insert it
   if (!keyWithBracket) {
-    nwePR.title= `[${key}] ${pr.title}`,
+    newPR.title = `[${key}] ${pr.title}`;
   }
-  
+
   const octokit = github.getOctokit(githubToken);
   octokit.pulls.update(newPR).then((res) => {
     if (res.status !== 200) core.setFailed(JSON.stringify(res));
