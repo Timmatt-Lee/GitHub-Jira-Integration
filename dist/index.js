@@ -1785,7 +1785,7 @@ async function main() {
     // const { data: emails } = await octokit.users.listEmailsForAuthenticated();
     // core.info(emails);
     // const { email: assigneeEmail } = email.find((_) => _.email.includes(''));
-    const { data } = await octokit.request('/users');
+    const { data } = await octokit.request('/app');
     core.info(JSON.stringify(data));
     process.exit(0);
 
