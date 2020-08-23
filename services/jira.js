@@ -121,6 +121,21 @@ class Jira {
     return result.item.accountId;
   }
 
+  async isMeCreatedIssue(issue) {
+    try {
+      const {
+        fields: {
+          reporter: { accountId: _1 },
+          assignee: { accountId: _2 },
+        },
+      } = await this.request(`/rest/api/3/issue/${issue}`);
+      return _1 === _2;
+    } catch (e) {
+      // any exception means reporter and assignee are not identical
+      return false;
+    }
+  }
+
   async request(api, method = 'get', data = {}) {
     const url = `${this.host}${api}`;
 

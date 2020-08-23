@@ -4,9 +4,11 @@
 
 Tired of switching tabs between GitHub and Jira?
 
-With this GitHub Action, a pull request will transit Jira issue and bind links on each other; resolve it once merged.
+With this GitHub Action, a pull request will transit Jira issue and bind links on each other.
 
-If you want, we can even auto create Jira issue on a pull request. 
+Auto resolve/fix-ready it once merged, depended on your reported issue or not.
+
+If you want, we can even auto create Jira issue on a pull request.
 
 Magically bring your name as assignee, move it in active sprint, and every properties you can imagine.
 
@@ -103,6 +105,7 @@ jobs:
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
         isOnlyTransition: true
+        otherAssignedTransition: ${{ secrets.JIRA_QA_TRANSITION_NAME }} # optional, trigger when issue is assigned by other
 ```
 
 Create GitHub Secrets
@@ -119,6 +122,7 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_VERSION_PREFIX`: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1`
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
 - `JIRA_PR_TRANSITION_NAME`: eg. `Start Progress`
+- `JIRA_QA_TRANSITION_NAME`: eg. `Ready to Fix`
 
 _**NOTE**_: you can rename secrets, but don't forget to change corresponding arguments in `.yml`
 

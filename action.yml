@@ -42,6 +42,9 @@ inputs:
     description: auto create issue
     required: false
     default: true
+  otherAssignedTransition:
+    description: if issue is assigned by others, transit to this transition
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

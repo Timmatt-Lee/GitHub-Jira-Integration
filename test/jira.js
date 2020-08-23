@@ -114,4 +114,9 @@ describe('jira issue', () => {
     const data = await jira.postMoveIssuesToSprint([this.issue.key], id);
     expect(data).to.not.equal(null);
   });
+
+  it('is mine created issue', async () => {
+    const yes = await jira.isMeCreatedIssue(this.issue.key);
+    expect(yes).equal(true);
+  });
 });
