@@ -39,12 +39,16 @@ inputs:
     required: false
     default: false
   isCreateIssue:
-    description: auto create issue
+    description: Auto create issue
     required: false
     default: true
   otherAssignedTransition:
-    description: if issue is assigned by others, transit to this transition
+    description: If issue is assigned by others, transit to this transition
     required: false
+  isAssignToReporter:
+    description: If you want to re-assign the issue to reporter
+    required: false
+    default: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
