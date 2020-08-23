@@ -1,5 +1,3 @@
-'user strict';
-
 const axios = require('axios');
 
 class Jira {
@@ -96,6 +94,11 @@ class Jira {
     return this.request(`/rest/agile/1.0/sprint/${id}/issue`, 'post', {
       issues,
     });
+  }
+
+  async getUserIdByEmail(email) {
+    const [{ accountId }] = await this.request(`/rest/api/3/user/search?query=${email}`);
+    return accountId;
   }
 
   async request(api, method = 'get', data = {}) {

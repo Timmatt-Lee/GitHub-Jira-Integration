@@ -1,3 +1,5 @@
+'user strict';
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 const Jira = require('./services/jira');
@@ -8,8 +10,9 @@ async function main() {
   const token = core.getInput('token', { required: true });
   const project = core.getInput('project', { required: true });
   const transition = core.getInput('transition', { required: true });
-  const githubToken = core.getInput('githubToken');
+  const githubToken = core.getInput('githubToken', { required: true });
   const version = core.getInput('version');
+  const emailSuffix = core.getInput('emailSuffix');
   const component = core.getInput('component');
   const type = core.getInput('type');
   const board = core.getInput('board');
@@ -21,6 +24,8 @@ async function main() {
   if (isCreateIssue && !type) {
     throw new Error('Creating issue need type');
   }
+
+  const octokit = github.getOctokit(githubToken);
 
   const jira = new Jira({
     host,
@@ -47,6 +52,10 @@ async function main() {
   } else {
     if (!isCreateIssue) { process.exit(0); }
     if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
+
+    const { data: emails } = await octokit.users.listEmailsForAuthenticated();
+    core.info(emails);
+    // const { email: assigneeEmail } = email.find((_) => _.email.includes(''));
 
     const issue = await jira.postIssue(pr.title);
     key = issue.key;
@@ -93,10 +102,9 @@ async function main() {
     delete newPR.title;
   }
 
-  const octokit = github.getOctokit(githubToken);
-  const response = await octokit.pulls.update(newPR);
-
-  if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
+  octokit.pulls.update(newPR).then((res) => {
+    if (res.status !== 200) core.setFailed(JSON.stringify(res));
+  });
 }
 
 main().catch(core.setFailed);

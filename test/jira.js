@@ -59,6 +59,11 @@ describe('jira', () => {
     const { values: [{ id }] } = await jira.getSprints('active');
     expect(id).to.not.equal(null);
   });
+
+  it('user id', async () => {
+    const id = await jira.getUserIdByEmail(email);
+    expect(id).to.not.equal(null);
+  });
 });
 
 describe('jira issue', () => {

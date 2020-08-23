@@ -21,6 +21,9 @@ inputs:
     required: true
   githubToken:
     description: Your github token
+    required: true
+  emailSuffix:
+    description: Creating issue required. Find GitHub user's email that include this suffix  
     required: false
   version:
     description: Version Prefix that new issue attach to 
