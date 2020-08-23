@@ -116,7 +116,7 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_COMPONENT_NAME`: component name that creating issue attach to
 - `JIRA_VERSION_PREFIX`: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1`
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
-- `JIRA_PR_TRANSITION_NAME`: eg. `In Progress`
+- `JIRA_PR_TRANSITION_NAME`: eg. `Start Progress`
 
 _**NOTE**_: you can rename secrets, but don't forget to change corresponding arguments in `.yml`
 
