@@ -105,6 +105,7 @@ jobs:
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
         isOnlyTransition: true
+        otherAssignedTransition: ${{ secrets.JIRA_QA_TRANSITION_NAME }} # optional, trigger when issue is assigned by other
 ```
 
 Create GitHub Secrets
@@ -121,6 +122,7 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_VERSION_PREFIX`: for creating issue auto attach to fix version that match the prefix. eg. `Backend Cloud v1`
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
 - `JIRA_PR_TRANSITION_NAME`: eg. `Start Progress`
+- `JIRA_QA_TRANSITION_NAME`: eg. `Ready to Fix`
 
 _**NOTE**_: you can rename secrets, but don't forget to change corresponding arguments in `.yml`
 
