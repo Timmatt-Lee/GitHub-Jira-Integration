@@ -70,7 +70,7 @@ async function main() {
   // reporter and assignee are identical in a new created issue
   // so only focus on an existed issue
   if (keyWithBracket && otherAssignedTransition) {
-    const isOtherAssignedIssue = await jira.isOtherAssignedIssue(key);
+    const isOtherAssignedIssue = await jira.isMeCreatedIssue(key);
     if (isOtherAssignedIssue) transition = otherAssignedTransition;
   }
 

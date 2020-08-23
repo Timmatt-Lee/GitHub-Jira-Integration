@@ -488,14 +488,19 @@ class Jira {
     return result.item.accountId;
   }
 
-  async isOtherAssignedIssue(issue) {
-    const {
-      fields: {
-        reporter: { accountId: _1 },
-        assignee: { accountId: _2 },
-      },
-    } = await this.request(`/rest/api/3/issue/${issue}`);
-    return _1 !== _2;
+  async isMeCreatedIssue(issue) {
+    try {
+      const {
+        fields: {
+          reporter: { accountId: _1 },
+          assignee: { accountId: _2 },
+        },
+      } = await this.request(`/rest/api/3/issue/${issue}`);
+      return _1 === _2;
+    } catch (e) {
+      // any exception means reporter and assignee are not identical
+      return false;
+    }
   }
 
   async request(api, method = 'get', data = {}) {
@@ -1829,7 +1834,7 @@ async function main() {
   // reporter and assignee are identical in a new created issue
   // so only focus on an existed issue
   if (keyWithBracket && otherAssignedTransition) {
-    const isOtherAssignedIssue = await jira.isOtherAssignedIssue(key);
+    const isOtherAssignedIssue = await jira.isMeCreatedIssue(key);
     if (isOtherAssignedIssue) transition = otherAssignedTransition;
   }
 

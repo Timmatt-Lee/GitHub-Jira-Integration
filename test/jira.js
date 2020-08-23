@@ -115,8 +115,8 @@ describe('jira issue', () => {
     expect(data).to.not.equal(null);
   });
 
-  it('is assigned by other', async () => {
-    const no = await jira.isOtherAssignedIssue(this.issue.key);
-    expect(no).equal(false);
+  it('is mine created issue', async () => {
+    const yes = await jira.isMeCreatedIssue(this.issue.key);
+    expect(yes).equal(true);
   });
 });
