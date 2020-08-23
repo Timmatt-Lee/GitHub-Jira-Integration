@@ -10,7 +10,7 @@ async function main() {
   const token = core.getInput('token', { required: true });
   const project = core.getInput('project', { required: true });
   const transition = core.getInput('transition', { required: true });
-  const githubToken = core.getInput('githubToken', { required: true });
+  const githubToken = core.getInput('githubToken');
   const version = core.getInput('version');
   const component = core.getInput('component');
   const type = core.getInput('type');

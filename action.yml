@@ -21,7 +21,7 @@ inputs:
     required: true
   githubToken:
     description: Your github token
-    required: true
+    required: false
   version:
     description: Version Prefix that new issue attach to 
     required: false
