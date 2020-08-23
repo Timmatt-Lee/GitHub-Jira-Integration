@@ -1,8 +1,9 @@
 on:
-  pull_request:
-    types: [reopened]
-    branches:
-      - master
+  push
+  # pull_request:
+  #   types: [reopened]
+  #   branches:
+  #     - master
 
 name: Test Pull Request
 
