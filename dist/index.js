@@ -1812,8 +1812,8 @@ async function main() {
   if (keyWithBracket) {
     key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
   } else {
-    if (!isCreateIssue) { process.exit(0); }
     if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
+    if (!isCreateIssue) { core.info('Nothing process'); process.exit(0); }
 
     const userId = await jira.getUserIdByFuzzyName(github.context.actor).catch(core.info);
 
@@ -1840,7 +1840,7 @@ async function main() {
 
   await jira.postTransitIssue(key, transition);
 
-  if (isOnlyTransition) { process.exit(0); }
+  if (isOnlyTransition) { core.info('transit completed'); process.exit(0); }
 
   await jira.postComment(key, {
     type: 'doc',
@@ -1872,6 +1872,8 @@ async function main() {
   octokit.pulls.update(newPR).then((res) => {
     if (res.status !== 200) core.setFailed(JSON.stringify(res));
   });
+
+  core.info('New issue created');
 }
 
 main().catch(core.setFailed);
