@@ -488,19 +488,33 @@ class Jira {
     return result.item.accountId;
   }
 
-  async isMeCreatedIssue(issue) {
-    try {
-      const {
-        fields: {
-          reporter: { accountId: _1 },
-          assignee: { accountId: _2 },
-        },
-      } = await this.request(`/rest/api/3/issue/${issue}`);
-      return _1 === _2;
-    } catch (e) {
-      // any exception means reporter and assignee are not identical
-      return false;
-    }
+  async getIssue(key) {
+    return this.request(`/rest/api/3/issue/${key}`);
+  }
+
+  async getIssueAssigneeId(key) {
+    const { fields } = await this.getIssue(key);
+    if (!fields.assignee) return null;
+
+    return fields.assignee.accountId;
+  }
+
+  async getIssueReporterId(key) {
+    const { fields } = await this.getIssue(key);
+    if (!fields.reporter) return null;
+
+    return fields.reporter.accountId;
+  }
+
+  async isMeCreatedIssue(key) {
+    const assigneeId = await this.getIssueAssigneeId(key);
+    const reporterId = await this.getIssueReporterId(key);
+    if (!assigneeId && !reporterId) return false;
+    return assigneeId === reporterId;
+  }
+
+  async putAssignIssue(key, accountId) {
+    return this.request(`/rest/api/3/issue/${key}/assignee`, 'put', { accountId });
   }
 
   async request(api, method = 'get', data = {}) {
@@ -1782,6 +1796,7 @@ async function main() {
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
   let isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
+  const isAssignToReporter = core.getInput('isAssignToReporter');
 
   if (isOnlyTransition) isCreateIssue = false;
 
@@ -1837,6 +1852,8 @@ async function main() {
     const isMeCreatedIssue = await jira.isMeCreatedIssue(key);
     if (!isMeCreatedIssue) transition = otherAssignedTransition;
   }
+
+  if (isAssignToReporter) await jira.putAssignIssue(key, await jira.getIssueReporterId);
 
   await jira.postTransitIssue(key, transition);
 

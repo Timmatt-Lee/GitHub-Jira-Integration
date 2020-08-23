@@ -119,4 +119,10 @@ describe('jira issue', () => {
     const yes = await jira.isMeCreatedIssue(this.issue.key);
     expect(yes).equal(true);
   });
+
+  it('assign to none', async () => {
+    await jira.putAssignIssue(this.issue.key, null);
+    const a = await jira.getIssueAssigneeId(this.issue.key);
+    expect(a).equal(null);
+  });
 });

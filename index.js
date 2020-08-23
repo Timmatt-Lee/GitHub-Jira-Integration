@@ -18,6 +18,7 @@ async function main() {
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
   let isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
+  const isAssignToReporter = core.getInput('isAssignToReporter');
 
   if (isOnlyTransition) isCreateIssue = false;
 
@@ -73,6 +74,8 @@ async function main() {
     const isMeCreatedIssue = await jira.isMeCreatedIssue(key);
     if (!isMeCreatedIssue) transition = otherAssignedTransition;
   }
+
+  if (isAssignToReporter) await jira.putAssignIssue(key, await jira.getIssueReporterId);
 
   await jira.postTransitIssue(key, transition);
 
