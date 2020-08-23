@@ -1799,9 +1799,9 @@ async function main() {
     if (!isCreateIssue) { process.exit(0); }
     if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
 
-    const userId = await jira.getUserIdByFuzzyName(github.context.actor).catch(core.info);
+    const userId = await jira.getUserIdByFuzzyName('LonelyyHu').catch(core.info);
 
-    const issue = await jira.postIssue(githubToken, userId);
+    const issue = await jira.postIssue(pr.title, userId);
     key = issue.key;
 
     if (board) {
