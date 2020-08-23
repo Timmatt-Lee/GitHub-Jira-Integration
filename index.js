@@ -75,7 +75,7 @@ async function main() {
     if (!isMeCreatedIssue) transition = otherAssignedTransition;
   }
 
-  if (isAssignToReporter) await jira.putAssignIssue(key, await jira.getIssueReporterId);
+  if (isAssignToReporter) await jira.putAssignIssue(key, await jira.getIssueReporterId(key));
 
   await jira.postTransitIssue(key, transition);
 
