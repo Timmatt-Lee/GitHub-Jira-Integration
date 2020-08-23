@@ -24,7 +24,7 @@ async function main() {
     throw new Error('Creating issue need type');
   }
 
-  core.info(JSON.stringify(github.context));
+  core.info(JSON.stringify(github));
   const githubToken = github.context.token;
   const octokit = github.getOctokit(githubToken);
 
