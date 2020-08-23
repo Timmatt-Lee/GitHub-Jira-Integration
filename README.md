@@ -126,6 +126,9 @@ _**NOTE**_: you can rename secrets, but don't forget to change corresponding arg
 # Install dependencies
 npm install
 
+# create .env and edit it
+mv .env.example .env
+
 # Run the tests
 npm test
 

@@ -18,7 +18,7 @@ Open an issue.
 
 ### Code Contribution
 
-1. Fork and follow the build process [here](README.md#build). 
+1. Fork and follow the build process [here](README.md#build).
 1. If you have IDE with eslint plugin, that's perfect. If not, please run `node_modules/.bin/eslint .` before you pull request. To make sure there is style consistency.
 1. Write your own test file and success in `npm test`.
 1. Please do test workflow in you repo as well, if you would like to add/modify some functionality about GitHub actions.
