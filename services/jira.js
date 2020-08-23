@@ -121,6 +121,16 @@ class Jira {
     return result.item.accountId;
   }
 
+  async isOtherAssignedIssue(issue) {
+    const {
+      fields: {
+        reporter: { accountId: _1 },
+        assignee: { accountId: _2 },
+      },
+    } = await this.request(`/rest/api/3/issue/${issue}`);
+    return _1 !== _2;
+  }
+
   async request(api, method = 'get', data = {}) {
     const url = `${this.host}${api}`;
 

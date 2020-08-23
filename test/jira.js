@@ -114,4 +114,9 @@ describe('jira issue', () => {
     const data = await jira.postMoveIssuesToSprint([this.issue.key], id);
     expect(data).to.not.equal(null);
   });
+
+  it('is assigned by other', async () => {
+    const no = await jira.isOtherAssignedIssue(this.issue.key);
+    expect(no).equal(false);
+  });
 });

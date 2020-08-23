@@ -24,3 +24,5 @@ jobs:
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
         isOnlyTransition: true
+        otherAssignedTransition: ${{ secrets.JIRA_QA_TRANSITION_NAME }}
+

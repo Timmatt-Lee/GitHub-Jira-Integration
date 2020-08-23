@@ -9,7 +9,7 @@ async function main() {
   const email = core.getInput('email', { required: true });
   const token = core.getInput('token', { required: true });
   const project = core.getInput('project', { required: true });
-  const transition = core.getInput('transition', { required: true });
+  let transition = core.getInput('transition', { required: true });
   const githubToken = core.getInput('githubToken');
   const version = core.getInput('version');
   const component = core.getInput('component');
@@ -17,6 +17,7 @@ async function main() {
   const board = core.getInput('board');
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
   let isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
+  const otherAssignedTransition = core.getInput('otherAssignedTransition');
 
   if (isOnlyTransition) isCreateIssue = false;
 
@@ -64,6 +65,13 @@ async function main() {
 
   if (!key) {
     core.setFailed('Issue key parse error');
+  }
+
+  // reporter and assignee are identical in a new created issue
+  // so only focus on an existed issue
+  if (keyWithBracket && otherAssignedTransition) {
+    const isOtherAssignedIssue = await jira.isOtherAssignedIssue(key);
+    if (isOtherAssignedIssue) transition = otherAssignedTransition;
   }
 
   await jira.postTransitIssue(key, transition);
