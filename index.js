@@ -18,7 +18,7 @@ async function main() {
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
   let isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
-  const isAssignToReporter = core.getInput('isAssignToReporter');
+  const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
   if (isOnlyTransition) isCreateIssue = false;
 
