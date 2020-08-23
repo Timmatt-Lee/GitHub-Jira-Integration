@@ -4,9 +4,11 @@
 
 Tired of switching tabs between GitHub and Jira?
 
-With this GitHub Action, a pull request will transit Jira issue and bind links on each other
+With this GitHub Action, a pull request will transit Jira issue and bind links on each other; resolve it once merged.
 
-Resolve it once merged.
+If you want, we can even auto create Jira issue on a pull request. 
+
+Magically bring your name as assignee, move it in active sprint, and every properties you can imagine.
 
 ## Demo
 
