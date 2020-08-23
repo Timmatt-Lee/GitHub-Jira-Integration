@@ -1,6 +1,5 @@
-'user strict';
-
 const axios = require('axios');
+const Fuse = require('fuse.js');
 
 class Jira {
   constructor({
@@ -39,7 +38,7 @@ class Jira {
     return id;
   }
 
-  async postIssue(summary) {
+  async postIssue(summary, userId) {
     const data = {
       fields: {
         summary,
@@ -53,6 +52,10 @@ class Jira {
     if (this.version) {
       const id = await this.getVersionIdByPrefix();
       data.fields.fixVersions = [{ id }];
+    }
+    if (userId) {
+      data.fields.reporter = { id: userId };
+      data.fields.assignee = { id: userId };
     }
     return this.request('/rest/api/3/issue', 'post', data);
   }
@@ -98,6 +101,26 @@ class Jira {
     });
   }
 
+  async getUserIdByName(name) {
+    const [{ accountId }] = await this.request(`/rest/api/3/user/search?query=${name}`);
+    if (!accountId) throw new Error('User not found by name');
+    return accountId;
+  }
+
+  async getAllUsers() {
+    return this.request('/rest/api/3/users/search?maxResults=10000');
+  }
+
+  async getUserIdByFuzzyName(name) {
+    const users = await this.getAllUsers();
+    const fuse = new Fuse(users, {
+      keys: ['displayName'],
+    });
+    const [result] = fuse.search(name);
+    if (!result) throw new Error('User not found by fuzzy name');
+    return result.item.accountId;
+  }
+
   async request(api, method = 'get', data = {}) {
     const url = `${this.host}${api}`;
 
@@ -109,7 +132,24 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch((e) => { throw new Error(JSON.stringify(e)); });
+    }).catch((error) => {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        return Promise.reject(new Error(JSON.stringify({
+          data: error.response.data,
+          status: error.response.status,
+          headers: error.response.headers,
+        })));
+      } if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        return Promise.reject(error.request);
+      }
+      // Something happened in setting up the request that triggered an Error
+      return Promise.reject(error.message);
+    });
 
     return result;
   }

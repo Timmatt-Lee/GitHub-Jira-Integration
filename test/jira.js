@@ -59,6 +59,16 @@ describe('jira', () => {
     const { values: [{ id }] } = await jira.getSprints('active');
     expect(id).to.not.equal(null);
   });
+
+  it('user id', async () => {
+    const id = await jira.getUserIdByName(process.env.NAME);
+    expect(id).to.not.equal(null);
+  });
+
+  it('user id by fuzzy search', async () => {
+    const id = await jira.getUserIdByFuzzyName(process.env.NAME);
+    expect(id).to.not.equal(null);
+  });
 });
 
 describe('jira issue', () => {

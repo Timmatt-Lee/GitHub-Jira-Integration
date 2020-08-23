@@ -2,6 +2,7 @@ dependencies:
   '@actions/core': 1.2.4
   '@actions/github': 4.0.0
   axios: 0.20.0
+  fuse.js: 6.4.1
 devDependencies:
   '@vercel/ncc': 0.23.0
   chai: 4.2.0
@@ -846,6 +847,12 @@ packages:
     dev: true
     resolution:
       integrity: sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
+  /fuse.js/6.4.1:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-+hAS7KYgLXontDh/vqffs7wIBw0ceb9Sx8ywZQhOsiQGcSO5zInGhttWOUYQYlvV/yYMJOacQ129Xs3mP3+oZQ==
   /get-caller-file/2.0.5:
     dev: true
     engines:
@@ -1926,5 +1933,6 @@ specifiers:
   eslint: ^7.7.0
   eslint-config-airbnb-base: ^14.2.0
   eslint-plugin-import: ^2.22.0
+  fuse.js: ^6.4.1
   mocha: ^8.1.1
   sinon-chai: ^3.5.0

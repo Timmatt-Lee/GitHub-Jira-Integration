@@ -1,3 +1,5 @@
+'user strict';
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 const Jira = require('./services/jira');
@@ -48,7 +50,9 @@ async function main() {
     if (!isCreateIssue) { process.exit(0); }
     if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
 
-    const issue = await jira.postIssue(pr.title);
+    const userId = await jira.getUserIdByFuzzyName(github.context.actor).catch(core.info);
+
+    const issue = await jira.postIssue(pr.title, userId);
     key = issue.key;
 
     if (board) {
@@ -84,19 +88,18 @@ async function main() {
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     pull_number: pr.number,
-    title: `[${key}] ${pr.title}`,
     body: `[${key}](${host}/browse/${key})\n${pr.body}`,
   };
 
-  // if title already has jira issue, no need to update it
-  if (keyWithBracket) {
-    delete newPR.title;
+  // if title has no jira issue, insert it
+  if (!keyWithBracket) {
+    newPR.title = `[${key}] ${pr.title}`;
   }
 
   const octokit = github.getOctokit(githubToken);
-  const response = await octokit.pulls.update(newPR);
-
-  if (response.status !== 200) { core.setFailed(JSON.stringify(response)); }
+  octokit.pulls.update(newPR).then((res) => {
+    if (res.status !== 200) core.setFailed(JSON.stringify(res));
+  });
 }
 
 main().catch(core.setFailed);
