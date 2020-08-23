@@ -4,11 +4,11 @@
 
 Tired of switching tabs between GitHub and Jira?
 
-With this GitHub Action, a pull request will transit Jira issue and bind links on each other.
+With this GitHub Action, a **pull request** will **transit** Jira issue and **bind links** on each other.
 
-Auto resolve/fix-ready it once merged, depended on your reported issue or not.
+Auto **resolve**/**fix-ready**(or even **re-assign** issue to reporter) once **merged**.
 
-If you want, we can even auto create Jira issue on a pull request.
+If you want, we can even **auto create Jira issue** on a pull request.
 
 Magically bring your name as assignee, move it in active sprint, and every properties you can imagine.
 
@@ -105,6 +105,7 @@ jobs:
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
         isOnlyTransition: true
+        isAssignToReporter: true  # optional, re-assign issue to reporter
         otherAssignedTransition: ${{ secrets.JIRA_QA_TRANSITION_NAME }} # optional, trigger when issue is assigned by other
 ```
 
