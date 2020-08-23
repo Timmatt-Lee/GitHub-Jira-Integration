@@ -25,7 +25,8 @@
   "dependencies": {
     "@actions/core": "^1.2.4",
     "@actions/github": "^4.0.0",
-    "axios": "^0.20.0"
+    "axios": "^0.20.0",
+    "fuse.js": "^6.4.1"
   },
   "devDependencies": {
     "@vercel/ncc": "^0.23.0",

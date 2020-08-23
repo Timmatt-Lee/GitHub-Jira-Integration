@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Fuse = require('fuse.js');
 
 class Jira {
   constructor({
@@ -37,7 +38,7 @@ class Jira {
     return id;
   }
 
-  async postIssue(summary) {
+  async postIssue(summary, userId) {
     const data = {
       fields: {
         summary,
@@ -51,6 +52,10 @@ class Jira {
     if (this.version) {
       const id = await this.getVersionIdByPrefix();
       data.fields.fixVersions = [{ id }];
+    }
+    if (userId) {
+      data.fields.reporter = { id: userId };
+      data.fields.assignee = { id: userId };
     }
     return this.request('/rest/api/3/issue', 'post', data);
   }
@@ -96,9 +101,24 @@ class Jira {
     });
   }
 
-  async getUserIdByEmail(email) {
-    const [{ accountId }] = await this.request(`/rest/api/3/user/search?query=${email}`);
+  async getUserIdByName(name) {
+    const [{ accountId }] = await this.request(`/rest/api/3/user/search?query=${name}`);
+    if (!accountId) throw new Error('User not found by name');
     return accountId;
+  }
+
+  async getAllUsers() {
+    return this.request('/rest/api/3/users/search?maxResults=10000');
+  }
+
+  async getUserIdByFuzzyName(name) {
+    const users = await this.getAllUsers();
+    const fuse = new Fuse(users, {
+      keys: ['displayName'],
+    });
+    const [result] = fuse.search(name);
+    if (!result) throw new Error('User not found by fuzzy name');
+    return result.item.accountId;
   }
 
   async request(api, method = 'get', data = {}) {
