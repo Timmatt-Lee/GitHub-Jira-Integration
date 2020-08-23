@@ -27,6 +27,8 @@ async function main() {
 
   const octokit = github.getOctokit(githubToken);
 
+  core.info(github.context);
+
   const jira = new Jira({
     host,
     email,
