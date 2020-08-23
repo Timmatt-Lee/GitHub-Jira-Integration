@@ -19,6 +19,9 @@ inputs:
   transition:
     description: Transition name that issue take
     required: true
+  githubToken:
+    description: Your github token
+    required: true
   emailSuffix:
     description: Creating issue required. Find GitHub user's email that include this suffix  
     required: false

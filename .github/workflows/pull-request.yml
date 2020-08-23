@@ -20,6 +20,7 @@ jobs:
         host: ${{ secrets.JIRA_BASE_URL }}
         email: ${{ secrets.JIRA_USER_EMAIL }}
         token: ${{ secrets.JIRA_API_TOKEN }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         emailSuffix: ${{ secrets.EMAIL_SUFFIX }}
         version: ${{ secrets.JIRA_VERSION_PREFIX }}

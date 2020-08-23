@@ -65,6 +65,7 @@ jobs:
         host: ${{ secrets.JIRA_BASE_URL }}
         email: ${{ secrets.JIRA_USER_EMAIL }}
         token: ${{ secrets.JIRA_API_TOKEN }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
         type: ${{ secrets.JIRA_ISSUE_TYPE }}                # optional, but required if you want to create issue
