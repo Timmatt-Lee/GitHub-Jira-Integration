@@ -479,7 +479,7 @@ class Jira {
         username: this.email,
         password: this.token,
       },
-    }).catch((e) => { throw new Error(JSON.stringify(e)); });
+    }).catch((e) => Promise.reject(e));
 
     return result;
   }
@@ -1768,7 +1768,7 @@ async function main() {
     const { data: emails } = await octokit.users.listEmailsForAuthenticated();
     core.info(emails);
     // const { email: assigneeEmail } = email.find((_) => _.email.includes(''));
-    process.exit(0);
+
     const issue = await jira.postIssue(pr.title);
     key = issue.key;
 
