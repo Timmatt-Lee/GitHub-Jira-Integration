@@ -25,7 +25,7 @@ async function main() {
 
   if (isOnlyTransition) isCreateIssue = false;
 
-  if (isCreateIssue && !type) {
+  if (!webhook && isCreateIssue && !type) {
     throw new Error('Creating issue need type');
   }
 
