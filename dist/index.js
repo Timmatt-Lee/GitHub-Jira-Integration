@@ -365,8 +365,8 @@ exports.Octokit = Octokit;
 /***/ 13:
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
-const axios = __webpack_require__(957);
 const Fuse = __webpack_require__(619);
+const request = __webpack_require__(562);
 
 class Jira {
   constructor({
@@ -518,36 +518,15 @@ class Jira {
   }
 
   async request(api, method = 'get', data = {}) {
-    const url = `${this.host}${api}`;
-
-    const { data: result } = await axios({
-      url,
+    return request({
+      url: `${this.host}${api}`,
       method,
       data,
       auth: {
         username: this.email,
         password: this.token,
       },
-    }).catch((error) => {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        return Promise.reject(new Error(JSON.stringify({
-          data: error.response.data,
-          status: error.response.status,
-          headers: error.response.headers,
-        })));
-      } if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        return Promise.reject(error.request);
-      }
-      // Something happened in setting up the request that triggered an Error
-      return Promise.reject(error.message);
     });
-
-    return result;
   }
 }
 
@@ -1046,6 +1025,36 @@ if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
   debug = function() {};
 }
 exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 81:
+/***/ (function(module) {
+
+class Github {
+  constructor({
+    github,
+    token,
+  }) {
+    this.context = github.context;
+    this.octokit = github.getOctokit(token);
+  }
+
+  async updatePR(obj) {
+    const newPR = {
+      owner: this.context.repo.owner,
+      repo: this.context.repo.repo,
+      pull_number: this.context.pull_request.number,
+      ...obj,
+    };
+
+    const res = await this.octokit.pulls.update(newPR);
+    if (res.status !== 200) Promise.reject(JSON.stringify(res));
+  }
+}
+
+module.exports = Github;
 
 
 /***/ }),
@@ -1780,14 +1789,17 @@ exports.Context = Context;
 
 const core = __webpack_require__(791);
 const github = __webpack_require__(660);
+const Github = __webpack_require__(81);
 const Jira = __webpack_require__(13);
+const request = __webpack_require__(562);
 
 async function main() {
-  const host = core.getInput('host', { required: true });
-  const email = core.getInput('email', { required: true });
-  const token = core.getInput('token', { required: true });
-  const project = core.getInput('project', { required: true });
-  let transition = core.getInput('transition', { required: true });
+  const webhook = core.getInput('webhook');
+  const host = core.getInput('host');
+  const email = core.getInput('email');
+  const token = core.getInput('token');
+  const project = core.getInput('project');
+  let transition = core.getInput('transition');
   const githubToken = core.getInput('githubToken');
   const version = core.getInput('version');
   const component = core.getInput('component');
@@ -1803,6 +1815,8 @@ async function main() {
   if (isCreateIssue && !type) {
     throw new Error('Creating issue need type');
   }
+
+  const gitService = new Github(github, githubToken);
 
   const jira = new Jira({
     host,
@@ -1822,12 +1836,16 @@ async function main() {
 
   let key = '';
 
-  // if title has a [AB-1234] like Jira issue key
   const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
   if (keyWithBracket) {
+    // if title has a [AB-1234] like Jira issue key
     key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
+    if (webhook) {
+      await request({ url: webhook, method: 'post', body: { issues: [key], pr } });
+      await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
+    }
   } else {
-    if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
+    if (isOnlyTransition || webhook) { core.info('No jira issue detected in PR title'); process.exit(0); }
     if (!isCreateIssue) { core.info('Nothing process'); process.exit(0); }
 
     const userId = await jira.getUserIdByFuzzyName(github.context.actor).catch(core.info);
@@ -1873,22 +1891,11 @@ async function main() {
   });
 
   // update pull request title and desc
-  const newPR = {
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    pull_number: pr.number,
-    body: `[${key}](${host}/browse/${key})\n${pr.body}`,
-  };
-
+  const newPR = { body: `[${key}](${host}/browse/${key})\n${pr.body}` };
   // if title has no jira issue, insert it
-  if (!keyWithBracket) {
-    newPR.title = `[${key}] ${pr.title}`;
-  }
+  if (!keyWithBracket) { newPR.title = `[${key}] ${pr.title}`; }
 
-  const octokit = github.getOctokit(githubToken);
-  octokit.pulls.update(newPR).then((res) => {
-    if (res.status !== 200) core.setFailed(JSON.stringify(res));
-  });
+  await gitService.updatePR(newPR);
 
   core.info('New issue created');
 }
@@ -2975,6 +2982,44 @@ function localstorage() {
     return window.localStorage;
   } catch (e) {}
 }
+
+
+/***/ }),
+
+/***/ 562:
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const axios = __webpack_require__(957);
+
+module.exports = async ({
+  url, method = 'get', data = {}, auth,
+}) => {
+  const { data: result } = await axios({
+    url,
+    method,
+    data,
+    auth,
+  }).catch((error) => {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      return Promise.reject(new Error(JSON.stringify({
+        data: error.response.data,
+        status: error.response.status,
+        headers: error.response.headers,
+      })));
+    } if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      return Promise.reject(error.request);
+    }
+    // Something happened in setting up the request that triggered an Error
+    return Promise.reject(error.message);
+  });
+
+  return result;
+};
 
 
 /***/ }),

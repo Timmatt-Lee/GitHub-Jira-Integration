@@ -4,21 +4,24 @@ branding:
   icon: 'git-pull-request'
   color: 'blue'
 inputs:
+  webhook:
+    description: Jira webhook trigger
+    required: false
   host:
     description: Domain of your jira host
-    required: true
+    required: false
   email:
     description: Your jira email address
-    required: true
+    required: false
   token:
     description: Your jira access token
-    required: true
+    required: false
   project:
     description: Project Short Name
-    required: true
+    required: false
   transition:
     description: Transition name that issue take
-    required: true
+    required: false
   githubToken:
     description: Your github token
     required: false

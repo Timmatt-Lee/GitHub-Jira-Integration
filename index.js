@@ -2,14 +2,17 @@
 
 const core = require('@actions/core');
 const github = require('@actions/github');
+const Github = require('./services/github');
 const Jira = require('./services/jira');
+const request = require('./services/request');
 
 async function main() {
-  const host = core.getInput('host', { required: true });
-  const email = core.getInput('email', { required: true });
-  const token = core.getInput('token', { required: true });
-  const project = core.getInput('project', { required: true });
-  let transition = core.getInput('transition', { required: true });
+  const webhook = core.getInput('webhook');
+  const host = core.getInput('host');
+  const email = core.getInput('email');
+  const token = core.getInput('token');
+  const project = core.getInput('project');
+  let transition = core.getInput('transition');
   const githubToken = core.getInput('githubToken');
   const version = core.getInput('version');
   const component = core.getInput('component');
@@ -25,6 +28,8 @@ async function main() {
   if (isCreateIssue && !type) {
     throw new Error('Creating issue need type');
   }
+
+  const gitService = new Github(github, githubToken);
 
   const jira = new Jira({
     host,
@@ -44,12 +49,16 @@ async function main() {
 
   let key = '';
 
-  // if title has a [AB-1234] like Jira issue key
   const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
   if (keyWithBracket) {
+    // if title has a [AB-1234] like Jira issue key
     key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
+    if (webhook) {
+      await request({ url: webhook, method: 'post', body: { issues: [key], pr } });
+      await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
+    }
   } else {
-    if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
+    if (isOnlyTransition || webhook) { core.info('No jira issue detected in PR title'); process.exit(0); }
     if (!isCreateIssue) { core.info('Nothing process'); process.exit(0); }
 
     const userId = await jira.getUserIdByFuzzyName(github.context.actor).catch(core.info);
@@ -95,22 +104,11 @@ async function main() {
   });
 
   // update pull request title and desc
-  const newPR = {
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    pull_number: pr.number,
-    body: `[${key}](${host}/browse/${key})\n${pr.body}`,
-  };
-
+  const newPR = { body: `[${key}](${host}/browse/${key})\n${pr.body}` };
   // if title has no jira issue, insert it
-  if (!keyWithBracket) {
-    newPR.title = `[${key}] ${pr.title}`;
-  }
+  if (!keyWithBracket) { newPR.title = `[${key}] ${pr.title}`; }
 
-  const octokit = github.getOctokit(githubToken);
-  octokit.pulls.update(newPR).then((res) => {
-    if (res.status !== 200) core.setFailed(JSON.stringify(res));
-  });
+  await gitService.updatePR(newPR);
 
   core.info('New issue created');
 }
