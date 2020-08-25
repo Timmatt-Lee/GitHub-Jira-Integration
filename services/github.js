@@ -1,9 +1,11 @@
+const github = require('@actions/github');
+
 class Github {
   constructor({
-    github,
+    context,
     token,
   }) {
-    this.context = github.context;
+    this.context = context;
     this.octokit = github.getOctokit(token);
   }
 

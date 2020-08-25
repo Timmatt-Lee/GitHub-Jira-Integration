@@ -1030,14 +1030,16 @@ exports.debug = debug; // for test
 /***/ }),
 
 /***/ 81:
-/***/ (function(module) {
+/***/ (function(module, __unusedexports, __webpack_require__) {
+
+const github = __webpack_require__(660);
 
 class Github {
   constructor({
-    github,
+    context,
     token,
   }) {
-    this.context = github.context;
+    this.context = context;
     this.octokit = github.getOctokit(token);
   }
 
@@ -1810,7 +1812,7 @@ async function main() {
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
-  const gitService = new Github(github, githubToken);
+  const gitService = new Github(github.context, githubToken);
 
   const jira = new Jira({
     host,
@@ -1823,12 +1825,10 @@ async function main() {
     board,
   });
 
-  core.info('tt');
   const pr = github.context.payload.pull_request;
   if (!pr) {
     core.setFailed('Only support pull request trigger');
   }
-  core.info('tt1');
 
   // `AB-1234` Jira issue key
   let [key] = pr.title.match('\\\\w+-\\d+\\');

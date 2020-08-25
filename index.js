@@ -23,7 +23,7 @@ async function main() {
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
-  const gitService = new Github(github, githubToken);
+  const gitService = new Github(github.context, githubToken);
 
   const jira = new Jira({
     host,
@@ -36,12 +36,10 @@ async function main() {
     board,
   });
 
-  core.info('tt');
   const pr = github.context.payload.pull_request;
   if (!pr) {
     core.setFailed('Only support pull request trigger');
   }
-  core.info('tt1');
 
   // `AB-1234` Jira issue key
   let [key] = pr.title.match('\\\\w+-\\d+\\');
