@@ -1851,17 +1851,24 @@ async function main() {
 
   if (isOnlyAppendDesc) {
     let from = 0;
+    let length = 0;
     if (appendDescAfterRegex) {
       from = pr.body.search(appendDescAfterRegex);
+      if (from === -1) { from = 0; } else {
+        const [word] = pr.body.match(appendDescAfterRegex);
+        length = word.length;
+      }
     }
 
     const body = `
-      ${pr.body.slice(0, from)}
-      [\${key}](\${host}/browse/\${key})
+      ${pr.body.slice(0, from + length)}
+      [${key}](${host}/browse/${key})
       ${from === 0 ? '\n' : ''}
-      ${pr.body.slice(from)}`;
+      ${pr.body.slice(from + length)}`;
 
     await gitService.updatePR({ body });
+    core.info('update PR description complete');
+    process.exit(0);
   }
 
   if (isCreateIssue) {
