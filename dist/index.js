@@ -1833,7 +1833,7 @@ async function main() {
   // `AB-1234` Jira issue key
   let [key] = pr.title.match('\\w+-\\d+');
   // no key detected in title, find in branch name
-  core.info(pr);
+  core.info(JSON.stringify(pr));
   if (!key) [key] = pr.head.ref.match('\\w+-\\d+');
 
   // project = key.substring(0, key.indexOf('-'));
