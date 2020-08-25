@@ -1860,11 +1860,7 @@ async function main() {
       }
     }
 
-    const body = `
-      ${pr.body.slice(0, from + length)}
-      [${key}](${host}/browse/${key})
-      ${from === 0 ? '\n' : ''}
-      ${pr.body.slice(from + length)}`;
+    const body = `${pr.body.slice(0, from + length)}[${key}](${host}/browse/${key})${from === 0 ? '\n' : ''}${pr.body.slice(from + length)}`;
 
     await gitService.updatePR({ body });
     core.info('update PR description complete');
