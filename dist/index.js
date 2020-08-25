@@ -1842,19 +1842,6 @@ async function main() {
   if (webhook) {
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
     await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
-    // comment on jira with this pr
-    await jira.postComment(key, {
-      type: 'doc',
-      version: 1,
-      content: [
-        {
-          type: 'blockCard',
-          attrs: {
-            url: pr.html_url,
-          },
-        },
-      ],
-    });
     core.info('webhook complete');
     process.exit(0);
   }
