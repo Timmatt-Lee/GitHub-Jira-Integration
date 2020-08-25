@@ -46,6 +46,7 @@ async function main() {
   // `AB-1234` Jira issue key
   let [key] = pr.title.match('\\w+-\\d+');
   // no key detected in title, find in branch name
+  core.info(pr);
   if (!key) [key] = pr.head.ref.match('\\w+-\\d+');
 
   // project = key.substring(0, key.indexOf('-'));
@@ -58,11 +59,17 @@ async function main() {
   }
 
   if (isOnlyAppendDesc) {
-    let body = `[${key}](${host}/browse/${key})\n${pr.body}`;
+    let from = 0;
     if (appendDescAfterRegex) {
-      const from = pr.body.search(appendDescAfterRegex);
-      body = `${pr.body.slice(0, from)}[\${key}](\${host}/browse/\${key})${pr.body.slice(from)}`;
+      from = pr.body.search(appendDescAfterRegex);
     }
+
+    const body = `
+      ${pr.body.slice(0, from)}
+      [\${key}](\${host}/browse/\${key})
+      ${from === 0 ? '\n' : ''}
+      ${pr.body.slice(from)}`;
+
     await gitService.updatePR({ body });
   }
 
