@@ -1829,7 +1829,7 @@ async function main() {
   }
 
   // `AB-1234` Jira issue key
-  let [key] = pr.title.match('\\\\w+-\\d+\\');
+  let [key] = pr.title.match('\\w+-\\d+');
 
   // project = key.substring(0, key.indexOf('-'));
 
