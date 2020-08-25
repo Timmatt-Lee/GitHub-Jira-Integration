@@ -1823,10 +1823,12 @@ async function main() {
     board,
   });
 
+  core.info('tt');
   const pr = github.context.payload.pull_request;
   if (!pr) {
     core.setFailed('Only support pull request trigger');
   }
+  core.info('tt1');
 
   // `AB-1234` Jira issue key
   let [key] = pr.title.match('\\\\w+-\\d+\\');
