@@ -76,7 +76,7 @@ jobs:
         component: ${{ secrets.JIRA_COMPONENT_NAME }}       # optional, created issue property
         version: ${{ secrets.JIRA_VERSION_PREFIX }}         # optional, created issue property
         board: ${{ secrets.JIRA_BOARD_ID }}                 # optional, sprint detection for created issue
-        isCreateIssue: false                                # optional, if you don't want to auto create issue
+        isCreateIssue: true                                # optional, if you want to auto create issue
 ```
 
 Create `.github/workflows/merge-jira.yml`

@@ -44,7 +44,7 @@ inputs:
   isCreateIssue:
     description: Auto create issue
     required: false
-    default: true
+    default: false
   otherAssignedTransition:
     description: If issue is assigned by others, transit to this transition
     required: false
