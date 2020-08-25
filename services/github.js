@@ -3,6 +3,8 @@ class Github {
     context,
     octokit,
   }) {
+    console.log(context);
+
     this.context = context;
     this.octokit = octokit;
   }

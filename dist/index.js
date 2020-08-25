@@ -1037,6 +1037,8 @@ class Github {
     context,
     octokit,
   }) {
+    console.log(context);
+
     this.context = context;
     this.octokit = octokit;
   }
@@ -1810,6 +1812,7 @@ async function main() {
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
+  core.info(github.context);
   const gitService = new Github(github.context, github.getOctokit(githubToken));
 
   const jira = new Jira({
