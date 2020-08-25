@@ -1,12 +1,10 @@
-const github = require('@actions/github');
-
 class Github {
   constructor({
     context,
-    token,
+    octokit,
   }) {
     this.context = context;
-    this.octokit = github.getOctokit(token);
+    this.octokit = octokit;
   }
 
   async updatePR(obj) {

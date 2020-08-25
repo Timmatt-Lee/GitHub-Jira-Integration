@@ -1030,17 +1030,15 @@ exports.debug = debug; // for test
 /***/ }),
 
 /***/ 81:
-/***/ (function(module, __unusedexports, __webpack_require__) {
-
-const github = __webpack_require__(660);
+/***/ (function(module) {
 
 class Github {
   constructor({
     context,
-    token,
+    octokit,
   }) {
     this.context = context;
-    this.octokit = github.getOctokit(token);
+    this.octokit = octokit;
   }
 
   async updatePR(obj) {
@@ -1812,7 +1810,7 @@ async function main() {
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
-  const gitService = new Github(github.context, githubToken);
+  const gitService = new Github(github.context, github.getOctokit(githubToken));
 
   const jira = new Jira({
     host,

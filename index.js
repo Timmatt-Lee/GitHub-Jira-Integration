@@ -23,7 +23,7 @@ async function main() {
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
-  const gitService = new Github(github.context, githubToken);
+  const gitService = new Github(github.context, github.getOctokit(githubToken));
 
   const jira = new Jira({
     host,
