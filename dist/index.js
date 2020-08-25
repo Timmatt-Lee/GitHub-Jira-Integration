@@ -1034,13 +1034,11 @@ exports.debug = debug; // for test
 
 class Github {
   constructor({
-    context,
-    octokit,
+    github,
+    githubToken,
   }) {
-    console.log(context);
-
-    this.context = context;
-    this.octokit = octokit;
+    this.context = github.context;
+    this.octokit = github.getOctokit(githubToken);
   }
 
   async updatePR(obj) {
@@ -1813,7 +1811,7 @@ async function main() {
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
   core.info(github.context);
-  const gitService = new Github(github.context, github.getOctokit(githubToken));
+  const gitService = new Github({ github, githubToken });
 
   const jira = new Jira({
     host,

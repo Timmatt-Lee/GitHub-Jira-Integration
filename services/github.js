@@ -1,12 +1,10 @@
 class Github {
   constructor({
-    context,
-    octokit,
+    github,
+    githubToken,
   }) {
-    console.log(context);
-
-    this.context = context;
-    this.octokit = octokit;
+    this.context = github.context;
+    this.octokit = github.getOctokit(githubToken);
   }
 
   async updatePR(obj) {

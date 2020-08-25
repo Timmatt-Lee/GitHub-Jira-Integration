@@ -24,7 +24,7 @@ async function main() {
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
   core.info(github.context);
-  const gitService = new Github(github.context, github.getOctokit(githubToken));
+  const gitService = new Github({ github, githubToken });
 
   const jira = new Jira({
     host,
