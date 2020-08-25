@@ -1840,7 +1840,7 @@ async function main() {
   }
 
   if (webhook) {
-    await request({ url: webhook, method: 'post', body: { issues: [key], pr } });
+    await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
     core.info('webhook complete');
     process.exit(0);
   }
