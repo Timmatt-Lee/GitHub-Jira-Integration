@@ -16,6 +16,7 @@ jobs:
     - name: Integration
       uses: ./
       with:
+        host: ${{ secrets.JIRA_BASE_URL }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         webhook: ${{ secrets.JIRA_WEBHOOK }}
 

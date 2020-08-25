@@ -1796,7 +1796,7 @@ const request = __webpack_require__(562);
 async function main() {
   const githubToken = core.getInput('githubToken', { required: true });
   const webhook = core.getInput('webhook');
-  const host = core.getInput('host');
+  const host = core.getInput('host', { required: true });
   const email = core.getInput('email');
   const token = core.getInput('token');
   const project = core.getInput('project');
@@ -1841,6 +1841,20 @@ async function main() {
 
   if (webhook) {
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
+    await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
+    // comment on jira with this pr
+    await jira.postComment(key, {
+      type: 'doc',
+      version: 1,
+      content: [
+        {
+          type: 'blockCard',
+          attrs: {
+            url: pr.html_url,
+          },
+        },
+      ],
+    });
     core.info('webhook complete');
     process.exit(0);
   }

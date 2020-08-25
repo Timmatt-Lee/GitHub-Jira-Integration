@@ -4,14 +4,14 @@ branding:
   icon: 'git-pull-request'
   color: 'blue'
 inputs:
+  host:
+    description: Domain of your jira host
+    required: true
   githubToken:
     description: Your github token
     required: true
   webhook:
     description: Jira webhook trigger
-    required: false
-  host:
-    description: Domain of your jira host
     required: false
   email:
     description: Your jira email address
