@@ -54,7 +54,6 @@ async function main() {
 
   if (webhook) {
     await request({ url: webhook, method: 'post', body: { issues: [key], pr } });
-    await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
     core.info('webhook complete');
     process.exit(0);
   }
