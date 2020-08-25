@@ -45,7 +45,36 @@ Magically bring your name as assignee, move it in active sprint, and every prope
 
 ## Usage
 
-### Create GitHub Action
+### If you already have Jira automation webhook
+
+Create `.github/workflows/jira.yml`
+
+```yml
+on:
+  pull_request:
+    types: [opened, closed]
+    branches:
+      - master
+
+name: Test Webhook
+
+jobs:
+  test:
+    name: Test Webhook
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Integration
+      uses: ./
+      with:
+        host: ${{ secrets.JIRA_BASE_URL }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        webhook: ${{ secrets.JIRA_WEBHOOK }}
+```
+
+### Otherwise
 
 Create `.github/workflows/pr-jira.yml`
 
@@ -76,7 +105,7 @@ jobs:
         component: ${{ secrets.JIRA_COMPONENT_NAME }}       # optional, created issue property
         version: ${{ secrets.JIRA_VERSION_PREFIX }}         # optional, created issue property
         board: ${{ secrets.JIRA_BOARD_ID }}                 # optional, sprint detection for created issue
-        isCreateIssue: false                                # optional, if you don't want to auto create issue
+        isCreateIssue: true                                 # optional, if you want to auto create issue
 ```
 
 Create `.github/workflows/merge-jira.yml`
@@ -124,6 +153,7 @@ _**NOTE**_: you need admin authorization of your repo
 - `JIRA_MERGE_TRANSITION_NAME`: eg. `Resolve`
 - `JIRA_PR_TRANSITION_NAME`: eg. `Start Progress`
 - `JIRA_QA_TRANSITION_NAME`: eg. `Ready to Fix`
+- `JIRA_WEBHOOK`: eg. `https://automation.atlassian.com/pro/hooks/19823a981b9b981ba981b2b4b5a`
 
 _**NOTE**_: you can rename secrets, but don't forget to change corresponding arguments in `.yml`
 

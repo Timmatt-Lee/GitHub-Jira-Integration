@@ -7,20 +7,23 @@ inputs:
   host:
     description: Domain of your jira host
     required: true
-  email:
-    description: Your jira email address
-    required: true
-  token:
-    description: Your jira access token
-    required: true
-  project:
-    description: Project Short Name
-    required: true
-  transition:
-    description: Transition name that issue take
-    required: true
   githubToken:
     description: Your github token
+    required: true
+  webhook:
+    description: Jira webhook trigger
+    required: false
+  email:
+    description: Your jira email address
+    required: false
+  token:
+    description: Your jira access token
+    required: false
+  project:
+    description: Project Short Name
+    required: false
+  transition:
+    description: Transition name that issue take
     required: false
   version:
     description: Version Prefix that new issue attach to 
@@ -41,7 +44,7 @@ inputs:
   isCreateIssue:
     description: Auto create issue
     required: false
-    default: true
+    default: false
   otherAssignedTransition:
     description: If issue is assigned by others, transit to this transition
     required: false

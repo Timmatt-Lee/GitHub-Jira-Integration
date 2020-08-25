@@ -1,0 +1,23 @@
+on:
+  pull_request:
+    types: [opened, closed]
+    branches:
+      - master
+
+name: Test Webhook
+
+jobs:
+  test:
+    name: Test Webhook
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Integration
+      uses: ./
+      with:
+        host: ${{ secrets.JIRA_BASE_URL }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        webhook: ${{ secrets.JIRA_WEBHOOK }}
+

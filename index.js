@@ -2,29 +2,28 @@
 
 const core = require('@actions/core');
 const github = require('@actions/github');
+const Github = require('./services/github');
 const Jira = require('./services/jira');
+const request = require('./services/request');
 
 async function main() {
+  const githubToken = core.getInput('githubToken', { required: true });
+  const webhook = core.getInput('webhook');
   const host = core.getInput('host', { required: true });
-  const email = core.getInput('email', { required: true });
-  const token = core.getInput('token', { required: true });
-  const project = core.getInput('project', { required: true });
-  let transition = core.getInput('transition', { required: true });
-  const githubToken = core.getInput('githubToken');
+  const email = core.getInput('email');
+  const token = core.getInput('token');
+  const project = core.getInput('project');
+  let transition = core.getInput('transition');
   const version = core.getInput('version');
   const component = core.getInput('component');
   const type = core.getInput('type');
   const board = core.getInput('board');
   const isOnlyTransition = core.getInput('isOnlyTransition').toLowerCase() === 'true';
-  let isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
+  const isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
 
-  if (isOnlyTransition) isCreateIssue = false;
-
-  if (isCreateIssue && !type) {
-    throw new Error('Creating issue need type');
-  }
+  const gitService = new Github({ github, githubToken });
 
   const jira = new Jira({
     host,
@@ -42,15 +41,27 @@ async function main() {
     core.setFailed('Only support pull request trigger');
   }
 
-  let key = '';
+  // `AB-1234` Jira issue key
+  let [key] = pr.title.match('\\w+-\\d+');
 
-  // if title has a [AB-1234] like Jira issue key
-  const keyWithBracket = pr.title.match(`\\[${project}-\\d+\\]`);
-  if (keyWithBracket) {
-    key = keyWithBracket[0].substring(1, keyWithBracket[0].length - 1);
-  } else {
-    if (isOnlyTransition) { throw new Error('Need a valid Jira issue key in your title'); }
-    if (!isCreateIssue) { core.info('Nothing process'); process.exit(0); }
+  // project = key.substring(0, key.indexOf('-'));
+
+  // if isOnlyTransition or webhook required, but no key detection
+  if (!key && (isOnlyTransition || webhook)) {
+    core.info('No jira issue detected in PR title');
+    process.exit(0);
+  }
+
+  if (webhook) {
+    await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
+    await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
+    core.info('webhook complete');
+    process.exit(0);
+  }
+
+  if (isCreateIssue) {
+    if (!project) throw new Error('Creating issue need project');
+    if (!type) throw new Error('Creating issue need type');
 
     const userId = await jira.getUserIdByFuzzyName(github.context.actor).catch(core.info);
 
@@ -62,25 +73,33 @@ async function main() {
       const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
       await jira.postMoveIssuesToSprint([key], activeSprintId);
     }
+  } else {
+    core.info('Nothing process');
+    process.exit(0);
   }
 
   if (!key) {
     core.setFailed('Issue key parse error');
   }
 
-  // reporter and assignee are identical in a new created issue
-  // so only focus on an existed issue
-  if (keyWithBracket && otherAssignedTransition) {
+  // transit issue
+  if (otherAssignedTransition) {
     const isMeCreatedIssue = await jira.isMeCreatedIssue(key);
+    // if issue was assigned by other
     if (!isMeCreatedIssue) transition = otherAssignedTransition;
   }
-
-  if (isAssignToReporter) await jira.putAssignIssue(key, await jira.getIssueReporterId(key));
-
   await jira.postTransitIssue(key, transition);
 
-  if (isOnlyTransition) { core.info('transit completed'); process.exit(0); }
+  if (isOnlyTransition) {
+    core.info('transit completed');
+    process.exit(0);
+  }
 
+  if (isAssignToReporter) {
+    await jira.putAssignIssue(key, await jira.getIssueReporterId(key));
+  }
+
+  // comment on jira with this pr
   await jira.postComment(key, {
     type: 'doc',
     version: 1,
@@ -95,22 +114,11 @@ async function main() {
   });
 
   // update pull request title and desc
-  const newPR = {
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
-    pull_number: pr.number,
-    body: `[${key}](${host}/browse/${key})\n${pr.body}`,
-  };
-
+  const newPR = { body: `[${key}](${host}/browse/${key})\n${pr.body}` };
   // if title has no jira issue, insert it
-  if (!keyWithBracket) {
-    newPR.title = `[${key}] ${pr.title}`;
-  }
+  if (isCreateIssue) { newPR.title = `[${key}] ${pr.title}`; }
 
-  const octokit = github.getOctokit(githubToken);
-  octokit.pulls.update(newPR).then((res) => {
-    if (res.status !== 200) core.setFailed(JSON.stringify(res));
-  });
+  await gitService.updatePR(newPR);
 
   core.info('New issue created');
 }
