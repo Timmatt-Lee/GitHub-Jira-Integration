@@ -1809,6 +1809,8 @@ async function main() {
   const isCreateIssue = core.getInput('isCreateIssue').toLowerCase() === 'true';
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
+  const isOnlyAppendDesc = core.getInput('isOnlyAppendDesc').toLowerCase() === 'true';
+  const appendDescAfterRegex = core.getInput('appendDescAfterRegex');
 
   const gitService = new Github({ github, githubToken });
 
@@ -1830,20 +1832,25 @@ async function main() {
 
   // `AB-1234` Jira issue key
   let [key] = pr.title.match('\\w+-\\d+');
+  // no key detected in title, find in branch name
+  if (!key) [key] = pr.head.ref.match('\\w+-\\d+');
 
   // project = key.substring(0, key.indexOf('-'));
-
-  // if isOnlyTransition or webhook required, but no key detection
-  if (!key && (isOnlyTransition || webhook)) {
-    core.info('No jira issue detected in PR title');
-    process.exit(0);
-  }
 
   if (webhook) {
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
     await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
     core.info('webhook complete');
     process.exit(0);
+  }
+
+  if (isOnlyAppendDesc) {
+    let body = `[${key}](${host}/browse/${key})\n${pr.body}`;
+    if (appendDescAfterRegex) {
+      const from = pr.body.search(appendDescAfterRegex);
+      body = `${pr.body.slice(0, from)}[\${key}](\${host}/browse/\${key})${pr.body.slice(from)}`;
+    }
+    await gitService.updatePR({ body });
   }
 
   if (isCreateIssue) {
@@ -1860,13 +1867,11 @@ async function main() {
       const { values: [{ id: activeSprintId }] } = await jira.getSprints('active');
       await jira.postMoveIssuesToSprint([key], activeSprintId);
     }
-  } else {
-    core.info('Nothing process');
-    process.exit(0);
   }
 
   if (!key) {
-    core.setFailed('Issue key parse error');
+    core.info('No jira issue detected in PR title/branch');
+    process.exit(0);
   }
 
   // transit issue
@@ -1875,7 +1880,9 @@ async function main() {
     // if issue was assigned by other
     if (!isMeCreatedIssue) transition = otherAssignedTransition;
   }
-  await jira.postTransitIssue(key, transition);
+  if (transition) {
+    await jira.postTransitIssue(key, transition);
+  }
 
   if (isOnlyTransition) {
     core.info('transit completed');
