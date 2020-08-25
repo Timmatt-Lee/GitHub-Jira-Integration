@@ -1796,13 +1796,13 @@ const Jira = __webpack_require__(13);
 const request = __webpack_require__(562);
 
 async function main() {
+  const githubToken = core.getInput('githubToken', { required: true });
   const webhook = core.getInput('webhook');
   const host = core.getInput('host');
   const email = core.getInput('email');
   const token = core.getInput('token');
   const project = core.getInput('project');
   let transition = core.getInput('transition');
-  const githubToken = core.getInput('githubToken');
   const version = core.getInput('version');
   const component = core.getInput('component');
   const type = core.getInput('type');

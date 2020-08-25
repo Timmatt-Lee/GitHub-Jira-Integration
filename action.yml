@@ -4,6 +4,9 @@ branding:
   icon: 'git-pull-request'
   color: 'blue'
 inputs:
+  githubToken:
+    description: Your github token
+    required: true
   webhook:
     description: Jira webhook trigger
     required: false
@@ -21,9 +24,6 @@ inputs:
     required: false
   transition:
     description: Transition name that issue take
-    required: false
-  githubToken:
-    description: Your github token
     required: false
   version:
     description: Version Prefix that new issue attach to 
