@@ -11,7 +11,7 @@ class Github {
     const newPR = {
       owner: this.context.repo.owner,
       repo: this.context.repo.repo,
-      pull_number: this.context.pull_request.number,
+      pull_number: this.context.payload.pull_request.number,
       ...obj,
     };
 
