@@ -4,11 +4,11 @@ on:
     branches:
       - master
 
-name: Test Only Update Desc
+name: Test Webhook
 
 jobs:
   test:
-    name: Test Only Update Desc
+    name: Test Webhook
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -19,6 +19,5 @@ jobs:
       with:
         host: ${{ secrets.JIRA_BASE_URL }}
         githubToken: ${{ secrets.GITHUB_TOKEN }}
-        isOnlyAppendDesc: true
-        appendDescAfterRegex: "Jira Issue Link:"
+        webhook: ${{ secrets.JIRA_WEBHOOK }}
 
