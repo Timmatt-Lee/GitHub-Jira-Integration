@@ -62,6 +62,7 @@ jobs:
   test:
     name: Jira Webhook Integration
     runs-on: ubuntu-latest
+    steps:
     - name: Integration
       uses: ./
       with:
