@@ -44,10 +44,14 @@ async function main() {
   }
 
   // `AB-1234` Jira issue key
-  let [key] = pr.title.match('\\w+-\\d+');
+  const foundInTitle = pr.title.match('\\w+-\\d+');
+  let key;
+  if (foundInTitle) [key] = foundInTitle;
   // no key detected in title, find in branch name
-  core.info(JSON.stringify(pr));
-  if (!key) [key] = pr.head.ref.match('\\w+-\\d+');
+  if (!key) {
+    const foundInBranch = pr.head.ref.match('\\w+-\\d+');
+    if (foundInBranch)[key] = foundInBranch;
+  }
 
   // project = key.substring(0, key.indexOf('-'));
 
