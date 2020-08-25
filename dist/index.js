@@ -1854,7 +1854,9 @@ async function main() {
     let length = 0;
     if (appendDescAfterRegex) {
       from = pr.body.search(appendDescAfterRegex);
-      if (from === -1) { from = 0; } else {
+      if (from === -1) {
+        from = 0;
+      } else {
         const [word] = pr.body.match(appendDescAfterRegex);
         length = word.length;
       }
