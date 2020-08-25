@@ -56,16 +56,12 @@ on:
     branches:
       - master
 
-name: Test Webhook
+name: Jira Webhook Integration
 
 jobs:
   test:
-    name: Test Webhook
+    name: Jira Webhook Integration
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@master
-
     - name: Integration
       uses: ./
       with:
