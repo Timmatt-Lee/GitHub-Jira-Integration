@@ -98,11 +98,13 @@ jobs:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
         project: ${{ secrets.JIRA_PROJECT_NAME }}
         transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
-        type: ${{ secrets.JIRA_ISSUE_TYPE }}                # optional, but required if you want to create issue
-        component: ${{ secrets.JIRA_COMPONENT_NAME }}       # optional, created issue property
-        version: ${{ secrets.JIRA_VERSION_PREFIX }}         # optional, created issue property
-        board: ${{ secrets.JIRA_BOARD_ID }}                 # optional, sprint detection for created issue
-        isCreateIssue: true                                 # optional, if you want to auto create issue
+        type: ${{ secrets.JIRA_ISSUE_TYPE }}              # optional, but required if you want to create issue
+        component: ${{ secrets.JIRA_COMPONENT_NAME }}     # optional, created issue property
+        version: ${{ secrets.JIRA_VERSION_PREFIX }}       # optional, created issue property
+        board: ${{ secrets.JIRA_BOARD_ID }}               # optional, sprint detection for created issue
+        isCreateIssue: true                               # optional, if you want to auto create issue
+        isOnlyAppendDesc: true                            # optional, if you only need update PR description
+        appendDescAfterRegex: "Jira Issue Link:"          # optional, insert link after regex in PR description
 ```
 
 Create `.github/workflows/merge-jira.yml`

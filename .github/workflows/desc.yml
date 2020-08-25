@@ -1,0 +1,24 @@
+on:
+  pull_request:
+    types: [opened, closed]
+    branches:
+      - master
+
+name: Test Only Update Desc
+
+jobs:
+  test:
+    name: Test Only Update Desc
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+
+    - name: Integration
+      uses: ./
+      with:
+        host: ${{ secrets.JIRA_BASE_URL }}
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        isOnlyAppendDesc: true
+        appendDescAfterRegex: "Jira Issue Link:"
+

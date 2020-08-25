@@ -52,6 +52,13 @@ inputs:
     description: If you want to re-assign the issue to reporter
     required: false
     default: false
+  isOnlyAppendDesc:
+    description: true if you only want to update PR description
+    required: false
+    default: false
+  appendDescAfterRegex:
+    description: insert jira issue link after this regex of PR description
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
