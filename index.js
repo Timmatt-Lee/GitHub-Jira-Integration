@@ -56,6 +56,10 @@ async function main() {
   // project = key.substring(0, key.indexOf('-'));
 
   if (webhook) {
+    if (!key) {
+      core.info('No jira issue detected in PR title/branch');
+      process.exit(0);
+    }
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
     await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
     core.info('webhook complete');
