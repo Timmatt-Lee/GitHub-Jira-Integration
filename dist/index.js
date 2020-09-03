@@ -513,6 +513,12 @@ class Jira {
     return assigneeId === reporterId;
   }
 
+  async getIssueSummary(key) {
+    const { fields: { summary } } = await this.getIssue(key);
+
+    return summary;
+  }
+
   async putAssignIssue(key, accountId) {
     return this.request(`/rest/api/3/issue/${key}/assignee`, 'put', { accountId });
   }
@@ -1842,13 +1848,45 @@ async function main() {
 
   // project = key.substring(0, key.indexOf('-'));
 
+  let issueTitle;
+  if (email && token && key) {
+    issueTitle = await jira.getIssueSummary(key);
+  }
+
   if (webhook) {
     if (!key) {
       core.info('No jira issue detected in PR title/branch');
       process.exit(0);
     }
+
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
-    await gitService.updatePR({ body: `[${key}](${host}/browse/${key})\n${pr.body}` });
+    if (foundInTitle) {
+      await gitService.updatePR({
+        body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? '' : ` ${issueTitle}`}`,
+      });
+    } else {
+      // issue name not existed in title, update it
+      await gitService.updatePR({
+        title: `[${key}] ${pr.title}`,
+        body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? '' : ` ${issueTitle}`}`,
+      });
+    }
+
+    if (email && token) {
+      await jira.postComment(key, {
+        type: 'doc',
+        version: 1,
+        content: [
+          {
+            type: 'blockCard',
+            attrs: {
+              url: pr.html_url,
+            },
+          },
+        ],
+      });
+    }
+
     core.info('webhook complete');
     process.exit(0);
   }
@@ -1866,7 +1904,7 @@ async function main() {
       }
     }
 
-    const body = `${pr.body.slice(0, from + length)}${from === 0 ? '' : ' '}[${key}](${host}/browse/${key})${from === 0 ? '\n' : ''}${pr.body.slice(from + length)}`;
+    const body = `${pr.body.slice(0, from + length)}${from === 0 ? '' : ' '}[${key}](${host}/browse/${key})${issueTitle ? '' : ` ${issueTitle}`}${from === 0 ? '\n' : ''}${pr.body.slice(from + length)}`;
 
     await gitService.updatePR({ body });
     core.info('update PR description complete');
@@ -1881,6 +1919,7 @@ async function main() {
 
     const issue = await jira.postIssue(pr.title, userId);
     key = issue.key;
+    issueTitle = pr.title;
 
     if (board) {
       // move card to active sprint
@@ -1928,9 +1967,9 @@ async function main() {
   });
 
   // update pull request title and desc
-  const newPR = { body: `[${key}](${host}/browse/${key})\n${pr.body}` };
+  const newPR = { body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? '' : ` ${issueTitle}`}` };
   // if title has no jira issue, insert it
-  if (isCreateIssue) { newPR.title = `[${key}] ${pr.title}`; }
+  if (isCreateIssue || !foundInTitle) { newPR.title = `[${key}] ${pr.title}`; }
 
   await gitService.updatePR(newPR);
 

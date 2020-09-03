@@ -125,4 +125,9 @@ describe('jira issue', () => {
     const a = await jira.getIssueAssigneeId(this.issue.key);
     expect(a).equal(null);
   });
+
+  it('title', async () => {
+    const t = await jira.getIssueSummary(this.issue.key);
+    expect(t).equal('title of issue');
+  });
 });

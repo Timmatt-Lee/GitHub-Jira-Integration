@@ -146,6 +146,12 @@ class Jira {
     return assigneeId === reporterId;
   }
 
+  async getIssueSummary(key) {
+    const { fields: { summary } } = await this.getIssue(key);
+
+    return summary;
+  }
+
   async putAssignIssue(key, accountId) {
     return this.request(`/rest/api/3/issue/${key}/assignee`, 'put', { accountId });
   }
