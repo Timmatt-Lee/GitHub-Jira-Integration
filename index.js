@@ -67,6 +67,13 @@ async function main() {
     }
 
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
+
+    core.info('webhook complete');
+
+    if (pr.merged) {
+      process.exit(0);
+    }
+
     if (foundInTitle) {
       await gitService.updatePR({
         body: `[${key}${issueTitle ? `: ${issueTitle}` : ''}](${host}/browse/${key})\n${pr.body}`,
@@ -94,7 +101,6 @@ async function main() {
       });
     }
 
-    core.info('webhook complete');
     process.exit(0);
   }
 
