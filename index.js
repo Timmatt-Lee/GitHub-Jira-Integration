@@ -69,13 +69,13 @@ async function main() {
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
     if (foundInTitle) {
       await gitService.updatePR({
-        body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? '' : ` ${issueTitle}`}`,
+        body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? ` ${issueTitle}` : ''}`,
       });
     } else {
       // issue name not existed in title, update it
       await gitService.updatePR({
         title: `[${key}] ${pr.title}`,
-        body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? '' : ` ${issueTitle}`}`,
+        body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? ` ${issueTitle}` : ''}`,
       });
     }
 
@@ -111,7 +111,7 @@ async function main() {
       }
     }
 
-    const body = `${pr.body.slice(0, from + length)}${from === 0 ? '' : ' '}[${key}](${host}/browse/${key})${issueTitle ? '' : ` ${issueTitle}`}${from === 0 ? '\n' : ''}${pr.body.slice(from + length)}`;
+    const body = `${pr.body.slice(0, from + length)}${from === 0 ? '' : ' '}[${key}](${host}/browse/${key})${issueTitle ? ` ${issueTitle}` : ''}${from === 0 ? '\n' : ''}${pr.body.slice(from + length)}`;
 
     await gitService.updatePR({ body });
     core.info('update PR description complete');
@@ -174,7 +174,7 @@ async function main() {
   });
 
   // update pull request title and desc
-  const newPR = { body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? '' : ` ${issueTitle}`}` };
+  const newPR = { body: `[${key}](${host}/browse/${key})\n${pr.body}${issueTitle ? ` ${issueTitle}` : ''}` };
   // if title has no jira issue, insert it
   if (isCreateIssue || !foundInTitle) { newPR.title = `[${key}] ${pr.title}`; }
 
