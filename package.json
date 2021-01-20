@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "test": "mocha  --timeout 10000",
+    "test": "mocha --timeout 10000",
     "build": "node_modules/.bin/ncc build index.js"
   },
   "repository": {

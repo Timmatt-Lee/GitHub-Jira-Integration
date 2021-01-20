@@ -32,7 +32,7 @@ class Jira {
 
   async getVersionIdByPrefix() {
     const versions = await this.getVersions();
-    const v = versions.find((_) => _.name.startsWith(this.version));
+    const v = versions.find((_) => _.name.startsWith(this.version) && !_.released);
     if (!v) throw new Error('Version prefix not found');
     const { id } = v;
     return id;
