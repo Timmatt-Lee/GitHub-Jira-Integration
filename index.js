@@ -23,6 +23,7 @@ async function main() {
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
   const isOnlyAppendDesc = core.getInput('isOnlyAppendDesc').toLowerCase() === 'true';
+  const isAddFixVersionOnMerge = core.getInput('isAddFixVersionOnMerge').toLowerCase() === 'true';
   const appendDescAfterRegex = core.getInput('appendDescAfterRegex');
 
   const gitService = new Github({ github, githubToken });
@@ -71,6 +72,10 @@ async function main() {
     core.info('webhook complete');
 
     if (pr.merged) {
+      if (isAddFixVersionOnMerge) {
+        const versionId = await jira.getVersionIdByPrefix(version);
+        await jira.putFixVersion(key, versionId);
+      }
       process.exit(0);
     }
 

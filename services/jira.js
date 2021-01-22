@@ -156,6 +156,18 @@ class Jira {
     return this.request(`/rest/api/3/issue/${key}/assignee`, 'put', { accountId });
   }
 
+  async putFixVersion(key, versionId) {
+    return this.request(`/rest/api/3/issue/${key}`, 'put', {
+      fields: {
+        fixVersions: [
+          {
+            id: versionId,
+          },
+        ],
+      },
+    });
+  }
+
   async request(api, method = 'get', data = {}) {
     return request({
       url: `${this.host}${api}`,
