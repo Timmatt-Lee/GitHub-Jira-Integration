@@ -40,25 +40,29 @@ inputs:
   isOnlyTransition:
     description: Only process transition to Jira issue
     required: false
-    default: false
+    default: 'false'
   isCreateIssue:
     description: Auto create issue
     required: false
-    default: false
+    default: 'false'
   otherAssignedTransition:
     description: If issue is assigned by others, transit to this transition
     required: false
   isAssignToReporter:
     description: If you want to re-assign the issue to reporter
     required: false
-    default: false
+    default: 'false'
   isOnlyAppendDesc:
     description: true if you only want to update PR description
     required: false
-    default: false
+    default: 'false'
   appendDescAfterRegex:
     description: insert jira issue link after this regex of PR description
     required: false
+  isAddFixVersionOnMerge:
+    description: true if you want to add fix version on merge
+    required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'

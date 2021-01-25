@@ -17,31 +17,31 @@ Magically bring your name as assignee, move it in active sprint, and every prope
 ### Pull Request and Create Jira issue
 
 1. create a pull request
-![create-jira-issue(github-before)](img/create-jira-issue(github-before).png)
+   ![create-jira-issue(github-before)](<img/create-jira-issue(github-before).png>)
 1. auto insert created issue key into title and desc
-![create-jira-issue(github-after)](img/create-jira-issue(github-after).png)
+   ![create-jira-issue(github-after)](<img/create-jira-issue(github-after).png>)
 1. auto create Jira issue with same title
 1. add `component`, `fix version`, `active sprint`
 1. record github pull request url
-![create-jira-issue(jira-after)](img/create-jira-issue(jira-after).png)
+   ![create-jira-issue(jira-after)](<img/create-jira-issue(jira-after).png>)
 
 ### Pull Request with Existed Jira issue
 
 1. here is an existed Jira issue
-![existed-jira-issue(jira-before)](img/existed-jira-issue(jira-before).png)
+   ![existed-jira-issue(jira-before)](<img/existed-jira-issue(jira-before).png>)
 1. create a pull request titled with Jira issue key
-![existed-jira-issue(github-before)](img/existed-jira-issue(github-before).png)
+   ![existed-jira-issue(github-before)](<img/existed-jira-issue(github-before).png>)
 1. auto insert Jira issue link into desc
-![existed-jira-issue(github-after)](img/existed-jira-issue(github-after).png)
+   ![existed-jira-issue(github-after)](<img/existed-jira-issue(github-after).png>)
 1. auto transit Jira issue
 1. record github pull request url
-![existed-jira-issue(jira-after)](img/existed-jira-issue(jira-after).png)
+   ![existed-jira-issue(jira-after)](<img/existed-jira-issue(jira-after).png>)
 
 ### Merge and Resolve Jira issue
 
 1. after merging pull request
 1. corresponding Jira issue got auto transited
-![resolve-jira-issue(jira-after)](img/resolve-jira-issue(jira-after).png)
+   ![resolve-jira-issue(jira-after)](<img/resolve-jira-issue(jira-after).png>)
 
 ## Usage
 
@@ -63,12 +63,12 @@ jobs:
     name: Jira Webhook Integration
     runs-on: ubuntu-latest
     steps:
-    - name: Integration
-      uses: ./
-      with:
-        host: ${{ secrets.JIRA_BASE_URL }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
-        webhook: ${{ secrets.JIRA_WEBHOOK }}
+      - name: Integration
+        uses: ./
+        with:
+          host: ${{ secrets.JIRA_BASE_URL }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          webhook: ${{ secrets.JIRA_WEBHOOK }}
 ```
 
 ### Otherwise
@@ -89,22 +89,22 @@ jobs:
     name: Pull Request and Jira issue integration
     runs-on: ubuntu-latest
     steps:
-    - name: Pull Request and Jira issue integration
-      uses: Timmatt-Lee/Github-Jira-Integration@master
-      with:
-        host: ${{ secrets.JIRA_BASE_URL }}
-        email: ${{ secrets.JIRA_USER_EMAIL }}
-        token: ${{ secrets.JIRA_API_TOKEN }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
-        project: ${{ secrets.JIRA_PROJECT_NAME }}
-        transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
-        type: ${{ secrets.JIRA_ISSUE_TYPE }}              # optional, but required if you want to create issue
-        component: ${{ secrets.JIRA_COMPONENT_NAME }}     # optional, created issue property
-        version: ${{ secrets.JIRA_VERSION_PREFIX }}       # optional, created issue property
-        board: ${{ secrets.JIRA_BOARD_ID }}               # optional, sprint detection for created issue
-        isCreateIssue: true                               # optional, if you want to auto create issue
-        isOnlyAppendDesc: true                            # optional, if you only need update PR description
-        appendDescAfterRegex: "Jira Issue Link:"          # optional, insert link after regex in PR description
+      - name: Pull Request and Jira issue integration
+        uses: Timmatt-Lee/Github-Jira-Integration@master
+        with:
+          host: ${{ secrets.JIRA_BASE_URL }}
+          email: ${{ secrets.JIRA_USER_EMAIL }}
+          token: ${{ secrets.JIRA_API_TOKEN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          project: ${{ secrets.JIRA_PROJECT_NAME }}
+          transition: ${{ secrets.JIRA_PR_TRANSITION_NAME }}
+          type: ${{ secrets.JIRA_ISSUE_TYPE }} # optional, but required if you want to create issue
+          component: ${{ secrets.JIRA_COMPONENT_NAME }} # optional, created issue property
+          version: ${{ secrets.JIRA_VERSION_PREFIX }} # optional, created issue property
+          board: ${{ secrets.JIRA_BOARD_ID }} # optional, sprint detection for created issue
+          isCreateIssue: true # optional, if you want to auto create issue
+          isOnlyAppendDesc: true # optional, if you only need update PR description
+          appendDescAfterRegex: "Jira Issue Link:" # optional, insert link after regex in PR description
 ```
 
 Create `.github/workflows/merge-jira.yml`
@@ -124,17 +124,17 @@ jobs:
     if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
-    - name: Transit Jira issue
-      uses: Timmatt-Lee/Github-Jira-Integration@master
-      with:
-        host: ${{ secrets.JIRA_BASE_URL }}
-        email: ${{ secrets.JIRA_USER_EMAIL }}
-        token: ${{ secrets.JIRA_API_TOKEN }}
-        project: ${{ secrets.JIRA_PROJECT_NAME }}
-        transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
-        isOnlyTransition: true
-        isAssignToReporter: true  # optional, re-assign issue to reporter
-        otherAssignedTransition: ${{ secrets.JIRA_QA_TRANSITION_NAME }} # optional, trigger when issue is assigned by other
+      - name: Transit Jira issue
+        uses: Timmatt-Lee/Github-Jira-Integration@master
+        with:
+          host: ${{ secrets.JIRA_BASE_URL }}
+          email: ${{ secrets.JIRA_USER_EMAIL }}
+          token: ${{ secrets.JIRA_API_TOKEN }}
+          project: ${{ secrets.JIRA_PROJECT_NAME }}
+          transition: ${{ secrets.JIRA_MERGE_TRANSITION_NAME }}
+          isOnlyTransition: true
+          isAssignToReporter: true # optional, re-assign issue to reporter
+          otherAssignedTransition: ${{ secrets.JIRA_QA_TRANSITION_NAME }} # optional, trigger when issue is assigned by other
 ```
 
 Create GitHub Secrets

@@ -23,8 +23,8 @@ async function main() {
   const otherAssignedTransition = core.getInput('otherAssignedTransition');
   const isAssignToReporter = core.getInput('isAssignToReporter').toLowerCase() === 'true';
   const isOnlyAppendDesc = core.getInput('isOnlyAppendDesc').toLowerCase() === 'true';
-  const isAddFixVersionOnMerge = core.getInput('isAddFixVersionOnMerge').toLowerCase() === 'true';
   const appendDescAfterRegex = core.getInput('appendDescAfterRegex');
+  const isAddFixVersionOnMerge = core.getInput('isAddFixVersionOnMerge').toLowerCase() === 'true';
 
   const gitService = new Github({ github, githubToken });
 
