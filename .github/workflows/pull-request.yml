@@ -1,8 +1,6 @@
 on:
   pull_request:
     types: [opened]
-    branches:
-      - master
 
 name: Test Pull Request
 

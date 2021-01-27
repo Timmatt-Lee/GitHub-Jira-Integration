@@ -71,6 +71,8 @@ async function main() {
 
     core.info('webhook complete');
 
+    core.info(isAddFixVersionOnMerge);
+
     if (isAddFixVersionOnMerge) {
       const versionId = await jira.getVersionIdByPrefix(version);
       const r = await jira.putFixVersion(key, versionId);
