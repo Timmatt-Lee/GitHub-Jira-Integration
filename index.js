@@ -69,9 +69,8 @@ async function main() {
 
     await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
 
-    core.info('webhook complete');
-
     core.info(isAddFixVersionOnMerge);
+    core.info('webhook complete');
 
     if (isAddFixVersionOnMerge) {
       const versionId = await jira.getVersionIdByPrefix(version);
