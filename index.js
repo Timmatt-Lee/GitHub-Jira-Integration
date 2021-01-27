@@ -71,11 +71,14 @@ async function main() {
 
     core.info('webhook complete');
 
+    if (isAddFixVersionOnMerge) {
+      const versionId = await jira.getVersionIdByPrefix(version);
+      const r = await jira.putFixVersion(key, versionId);
+      core.info(r);
+      core.info('version complete');
+    }
+
     if (pr.merged) {
-      if (isAddFixVersionOnMerge) {
-        const versionId = await jira.getVersionIdByPrefix(version);
-        await jira.putFixVersion(key, versionId);
-      }
       process.exit(0);
     }
 
