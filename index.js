@@ -67,8 +67,8 @@ async function main() {
       process.exit(0);
     }
 
-    await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
-
+    const rrr = await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
+    core.info(rrr);
     core.info('webhook complete');
 
     if (isAddFixVersionOnMerge) {

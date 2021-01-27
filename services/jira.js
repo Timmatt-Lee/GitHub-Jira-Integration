@@ -28,7 +28,6 @@ class Jira {
   }
 
   async getVersions() {
-    core.info(this.project);
     return this.request(`/rest/api/3/project/${this.project}/versions`);
   }
 
