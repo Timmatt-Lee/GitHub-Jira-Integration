@@ -21,4 +21,5 @@ jobs:
         token: ${{ secrets.JIRA_API_TOKEN }}
         email: ${{ secrets.JIRA_USER_EMAIL }}
         version: ${{ secrets.JIRA_VERSION_PREFIX }}
+        project: ${{ secrets.JIRA_PROJECT_NAME }}
         isAddFixVersionOnMerge: true
