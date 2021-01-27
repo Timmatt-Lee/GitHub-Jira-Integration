@@ -12096,7 +12096,7 @@ async function main() {
 
     const rrr = await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
     core.info(rrr);
-    core.info('webhook complete');
+    core.info('webhook complete1');
 
     if (isAddFixVersionOnMerge) {
       const versionId = await jira.getVersionIdByPrefix(version);
