@@ -1365,6 +1365,7 @@ class Jira {
   }
 
   async getVersions() {
+    core.info('1');
     core.info(this.project);
     return this.request(`/rest/api/3/project/${this.project}/versions`);
   }
@@ -12096,7 +12097,7 @@ async function main() {
 
     const rrr = await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
     core.info(rrr);
-    core.info('webhook complete1');
+    core.info('webhook complete');
 
     if (isAddFixVersionOnMerge) {
       const versionId = await jira.getVersionIdByPrefix(version);
