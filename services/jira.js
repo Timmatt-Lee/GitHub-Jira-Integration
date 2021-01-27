@@ -1,4 +1,5 @@
 const Fuse = require('fuse.js');
+const core = require('@actions/core');
 const request = require('./request');
 
 class Jira {
@@ -27,6 +28,7 @@ class Jira {
   }
 
   async getVersions() {
+    core.info(this.project);
     return this.request(`/rest/api/3/project/${this.project}/versions`);
   }
 
