@@ -1336,6 +1336,7 @@ exports.restEndpointMethods = restEndpointMethods;
 /***/ (function(module, __unusedexports, __webpack_require__) {
 
 const Fuse = __webpack_require__(571);
+const core = __webpack_require__(186);
 const request = __webpack_require__(876);
 
 class Jira {
@@ -1364,6 +1365,7 @@ class Jira {
   }
 
   async getVersions() {
+    core.info(this.project);
     return this.request(`/rest/api/3/project/${this.project}/versions`);
   }
 
@@ -12092,8 +12094,8 @@ async function main() {
       process.exit(0);
     }
 
-    await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
-
+    const rrr = await request({ url: webhook, method: 'post', data: { issues: [key], pr } });
+    core.info(rrr);
     core.info('webhook complete');
 
     if (isAddFixVersionOnMerge) {
