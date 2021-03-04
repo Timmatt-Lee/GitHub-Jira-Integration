@@ -1,4 +1,4 @@
-name: 'Timmatt-Lee/Github-Jira-Integration'
+name: 'Timmatt-Lee/GitHub-Jira-Integration'
 description: 'Automatically create or bind pull request to jira issue, resolve it when merged'
 branding:
   icon: 'git-pull-request'

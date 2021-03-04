@@ -1,6 +1,6 @@
-# Github-Jira-Integration
+# GitHub-Jira-Integration
 
-[![GitHub Release](https://img.shields.io/github/release/Timmatt-Lee/Github-Jira-Integration.svg?style=flat)](https://github.com/Timmatt-Lee/Github-Jira-Integration/releases/latest) [![Dependency Status](https://david-dm.org/Timmatt-Lee/Github-Jira-Integration.svg)](https://david-dm.org/Timmatt-Lee/Github-Jira-Integration) [![devDependencies Status](https://david-dm.org/Timmatt-Lee/Github-Jira-Integration/dev-status.svg)](https://david-dm.org/Timmatt-Lee/Github-Jira-Integration?type=dev) [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://github.com/Timmatt-Lee/Github-Jira-Integration/pulls)
+[![GitHub Release](https://img.shields.io/github/release/Timmatt-Lee/GitHub-Jira-Integration.svg?style=flat)](https://github.com/Timmatt-Lee/GitHub-Jira-Integration/releases/latest) [![Dependency Status](https://david-dm.org/Timmatt-Lee/GitHub-Jira-Integration.svg)](https://david-dm.org/Timmatt-Lee/GitHub-Jira-Integration) [![devDependencies Status](https://david-dm.org/Timmatt-Lee/GitHub-Jira-Integration/dev-status.svg)](https://david-dm.org/Timmatt-Lee/GitHub-Jira-Integration?type=dev) [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](https://github.com/Timmatt-Lee/GitHub-Jira-Integration/pulls)
 
 Tired of switching tabs between GitHub and Jira?
 
@@ -90,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Pull Request and Jira issue integration
-        uses: Timmatt-Lee/Github-Jira-Integration@master
+        uses: Timmatt-Lee/GitHub-Jira-Integration@master
         with:
           host: ${{ secrets.JIRA_BASE_URL }}
           email: ${{ secrets.JIRA_USER_EMAIL }}
@@ -125,7 +125,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Transit Jira issue
-        uses: Timmatt-Lee/Github-Jira-Integration@master
+        uses: Timmatt-Lee/GitHub-Jira-Integration@master
         with:
           host: ${{ secrets.JIRA_BASE_URL }}
           email: ${{ secrets.JIRA_USER_EMAIL }}
